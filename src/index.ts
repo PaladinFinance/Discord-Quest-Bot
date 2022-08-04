@@ -1,17 +1,21 @@
-import setDataFromArgs from './listener/discord/setDataFromArgs';
 import setInteractionChannel from './listener/discord/setInteractionChannel';
 import setTargetChannel from './listener/discord/setTargetChannel';
 import createEtherEventListener from './scripts/createEtherEventListener';
 import QuestBoardAbi from './data/QuestBoardAbi.json';
 import questCreationListener from './listener/ethers/questCreationListener';
+import data from './data/data.json';
 
-setInteractionChannel();
-setTargetChannel();
-setDataFromArgs(['veBALQuestBoardContractAddress'], '!setBalancerContractAddress');
-setDataFromArgs(['veCRVQuestBoardContractAddress'], '!setCurverContractAddress');
+setInteractionChannel('!here', 'interactionChannelId', 'wow');
+setTargetChannel('!target', 'targetChannelId');
 createEtherEventListener(
-  '0xA6Ed52EB3e39891CE5029817CdB5eAc97A2834B3',
+  data.veBALQuestBoardContractAddress,
   QuestBoardAbi,
-  'QuestCreated',
+  'NewQuest',
+  questCreationListener,
+);
+createEtherEventListener(
+  data.veCRVQuestBoardContractAddress,
+  QuestBoardAbi,
+  'NewQuest',
   questCreationListener,
 );

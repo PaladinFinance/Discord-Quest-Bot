@@ -1,0 +1,57 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "questID",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "gauge",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "rewardToken",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint48",
+                "name": "duration",
+                "type": "uint48"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "startPeriod",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "objectiveVotes",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "rewardPerVote",
+                "type": "uint256"
+            }
+        ],
+        "name": "NewQuest",
+        "type": "event"
+    }
+]
