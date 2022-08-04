@@ -1,0 +1,23 @@
+{
+	"extends": ["airbnb-typescript/base", "prettier"],
+	"plugins": ["import", "prettier"],
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"rules": {
+		"prettier/prettier": ["error", {
+			"tabWidth": 2,
+			"semi": true,
+			"printWidth": 100,
+			"singleQuote": true,
+			"trailingComma": "all"
+		  }
+		],
+		"no-plusplus": "off",
+		"no-console": "off"
+	}
+}
