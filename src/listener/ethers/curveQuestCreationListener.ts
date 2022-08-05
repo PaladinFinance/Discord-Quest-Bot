@@ -17,18 +17,24 @@ const questCreationListener: Listener = (
   objectiveVotes,
   rewardPerVote,
 ) => {
-  const dateConverted = dateToCron(new Date(startPeriod.toNumber() * 1000));
-  schedule.scheduleJob(dateConverted, async () => {
-    const data = JSON.parse(
-      fs.readFileSync('./src/data/data.json', {
-        encoding: 'utf8',
-        flag: 'r',
-      }),
-    );
-    const channel = client.channels.cache.get(data.targetChannelId);
-    const exampleEmbed = await getCurveEmbed(gauge, rewardToken, objectiveVotes, rewardPerVote);
-    if (channel?.type === ChannelType.GuildText) channel.send({ embeds: [exampleEmbed] });
-  });
+  try {
+    const dateConverted = dateToCron(new Date(startPeriod.toNumber() * 1000));
+
+    schedule.scheduleJob(dateConverted, async () => {
+      const data = JSON.parse(
+        fs.readFileSync('./src/data/data.json', {
+          encoding: 'utf8',
+          flag: 'r',
+        }),
+      );
+
+      const channel = client.channels.cache.get(data.targetChannelId);
+      const exampleEmbed = await getCurveEmbed(gauge, rewardToken, objectiveVotes, rewardPerVote);
+      if (channel?.type === ChannelType.GuildText) channel.send({ embeds: [exampleEmbed] });
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export default questCreationListener;

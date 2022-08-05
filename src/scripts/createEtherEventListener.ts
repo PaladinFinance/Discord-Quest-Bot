@@ -9,8 +9,12 @@ const createEtherEventListener = (
   eventName: string,
   listener: Listener,
 ) => {
-  const contract = new Contract(address, abi, provider);
-  contract.on(eventName, listener);
+  try {
+    const contract = new Contract(address, abi, provider);
+    contract.on(eventName, listener);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export default createEtherEventListener;
