@@ -5,6 +5,7 @@ import fs from 'fs';
 import client from '../../config/client';
 import dateToCron from '../../scripts/dateToCron';
 import { ChannelType } from 'discord.js';
+import getBalancerEmbed from '../../scripts/getBalancerEmbed';
 
 const questCreationListener: Listener = (
   questID,
@@ -16,36 +17,17 @@ const questCreationListener: Listener = (
   objectiveVotes,
   rewardPerVote,
 ) => {
-  const dateConverted = dateToCron(new Date(startPeriod));
-  schedule.scheduleJob(dateConverted, () => {
+  const dateConverted = dateToCron(new Date(startPeriod.toNumber() * 1000));
+  schedule.scheduleJob(dateConverted, async () => {
     const data = JSON.parse(
       fs.readFileSync('./src/data/data.json', {
         encoding: 'utf8',
         flag: 'r',
       }),
     );
-    console.log(
-      questID,
-      creator,
-      gauge,
-      rewardToken,
-      duration,
-      startPeriod,
-      objectiveVotes,
-      rewardPerVote,
-    );
-    // TODO send embeeded message to the channel
-    /*
     const channel = client.channels.cache.get(data.targetChannelId);
-    const exampleEmbed = {
-      color: 0xffa500,
-      title: `New veCRV Quest: ${gauge}`,
-      url: 'http://app.warden.vote/quest/',
-      description: `rewards are now available on app.warden.vote\n\ncan be captured by users who vote for ${gauge}`,
-      timestamp: new Date().toISOString(),
-    };
+    const exampleEmbed = await getBalancerEmbed(gauge, rewardToken, objectiveVotes, rewardPerVote);
     if (channel?.type === ChannelType.GuildText) channel.send({ embeds: [exampleEmbed] });
-    */
   });
 };
 
