@@ -12,6 +12,7 @@ const createEtherEventListener = (
   try {
     const contract = new Contract(address, abi, provider);
     contract.on(eventName, listener);
+    console.log(`Listening to ${address}`);
   } catch (err) {
     console.error(err);
   }
