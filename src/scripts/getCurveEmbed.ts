@@ -13,11 +13,11 @@ const getCurveEmbed = async (
 ): Promise<APIEmbed> => {
   const gaugeSymbol = await getSymbolFromGauge(gauge);
   const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
-  const totalRewardToken = await getTotalRewardToken(objectiveVotes, rewardPerVote);
+  const totalRewardToken = getTotalRewardToken(objectiveVotes, rewardPerVote);
   const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
 
   const exampleEmbed = {
-    color: 0xffa500,
+    color: 0xfffff,
     title: `New veCRV Quest: ${gaugeSymbol}`,
     url: 'http://app.warden.vote/quest/',
     description: `$${rewardTokenSymbol} rewards are now available on app.warden.vote\n\n${totalRewardToken.toString()} $${rewardTokenSymbol} ($${totalPrice.toFixed(
