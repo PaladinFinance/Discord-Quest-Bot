@@ -27,7 +27,7 @@ You will need a discord bot so I suggest you create one following a tutorial lik
 ## Start
 
 - First you need to set environment variables in the .env
-- Then you can set the contract addresses for the two QuestBoard as veCRVQuestBoardContractAddress and veBALQuestBoardContractAddress
+- Then you can set the contract addresses for the two QuestBoard as veCRVQuestBoardContractAddress and veBALQuestBoardContractAddress inside the [data file](./src/data/data.json)
 - Finally you can start the discord bot with `yarn start`
 
 ## Utilisation
