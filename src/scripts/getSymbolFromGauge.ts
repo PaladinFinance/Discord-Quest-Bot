@@ -1,6 +1,6 @@
 import { Contract } from 'ethers';
 import provider from '../config/etherProvider';
-import gaugeAbi from '../data/gaugeAbi.json';
+import gaugeAbi from '../data/abi/gaugeAbi.json';
 
 const getSymbolFromGauge = async (gauge: string): Promise<string> => {
   const gaugeContract = new Contract(gauge, gaugeAbi, provider);
