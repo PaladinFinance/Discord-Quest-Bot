@@ -38,6 +38,21 @@ The bot so far has two commands:
 The `!here` set the interaction channel to the one where you send the message so the channel where you can talk with the bot (only the Paladin role can call it)
 The `!target CHANNEL_NAME` set the target channel so where are going to be the messages whenever there is a new quest (everyone can call it on the interaction channel)
 
+## Ressources
+
+Website : [paladin.vote](https://.paladin.vote)
+
+Documentation : [doc.paladin.vote](https://doc.paladin.vote)
+
+
+## Community
+
+For any question about this project, or to engage with us :
+
+[Twitter](https://twitter.com/Paladin_vote)
+
+[Discord](https://discord.com/invite/esZhmTbKHc)
+
 ## License 
 
 This project is licensed under the MIT license
