@@ -1,6 +1,10 @@
 # Discord-Quest-Bot
 
-Discord bot that send a message to a specific channel whenever there is a new quest being created for Curve or Balancer
+Discord bot that send a message to a specific channel whenever there is a new quest being created for **Curve** or **Balancer**
+
+<div align="center">
+  <img src=".github/assets/paladin-bot-message-example.png" width="80%" />
+</div>
 
 ## Dependencies & Installation
 
