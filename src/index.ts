@@ -6,7 +6,7 @@ import balancerQuestCreationListener from './listener/ethers/balancerQuestCreati
 import curveQuestCreationListener from './listener/ethers/curveQuestCreationListener';
 import data from './data/data.json';
 
-setInteractionChannel('!here', 'interactionChannelId', 'wow');
+setInteractionChannel('!here', 'interactionChannelId', 'Paladin');
 setTargetChannel('!target', 'targetChannelId');
 createEtherEventListener(
   data.veBALQuestBoardContractAddress,
