@@ -25,6 +25,7 @@ const setTargetChannel = (command: string, dataType: string) => {
             data[dataType] = getTextChannelIdFromName(args[1]);
             fs.writeFileSync('./src/data/data.json', JSON.stringify(data));
             msg.reply('target channel set');
+            console.log(`${dataType} set to ${data[dataType]}`);
           }
         }
       }

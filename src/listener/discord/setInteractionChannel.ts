@@ -12,6 +12,7 @@ const setInteractionChannel = (command: string, dataType: string, roleNeeded: st
         data[dataType] = msg.channel.id;
         fs.writeFileSync('./src/data/data.json', JSON.stringify(data));
         msg.reply('interaction channel set');
+        console.log(`${dataType} set to ${msg.channel.id}`);
       }
     });
   } catch (err) {
