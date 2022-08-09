@@ -4,6 +4,7 @@ import getSymbolFromGauge from './getSymbolFromGauge';
 import getSymbolFromToken from './getSymbolFromToken';
 import getTotalPricePerToken from './getTotalPricePerToken';
 import getTotalRewardToken from './getTotalRewardToken';
+import getDecimalsFromToken from './getDecimalsFromToken';
 
 export enum ProtocolType {
   Curve,
@@ -19,7 +20,8 @@ export const getProtocolEmbed = async (
 ): Promise<APIEmbed> => {
   const gaugeSymbol = await getSymbolFromGauge(gauge);
   const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
-  const totalRewardToken = getTotalRewardToken(objectiveVotes, rewardPerVote);
+  const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
+  const totalRewardToken = getTotalRewardToken(objectiveVotes, rewardPerVote, rewardTokenDecimals);
   const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
   const protocolName = protocol === ProtocolType.Curve ? 'veCRV' : 'veBAL';
   const protocolURI = protocol === ProtocolType.Curve ? 'protocol=crv' : 'protocol=bal';
