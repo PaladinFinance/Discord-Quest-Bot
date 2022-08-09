@@ -34,7 +34,7 @@ You will need a discord bot so I suggest you create one following a tutorial lik
 
 The bot so far has two commands:
   - `!here` set the interaction channel to the one where you send the message so the channel where you can talk with the bot (only the Paladin role can call it)
-  - `!target CHANNEL_NAME` set the target channel so where are going to be the messages whenever there is a new quest (everyone can call it on the interaction channel)
+  - `!target #CHANNEL` set the target channel so where are going to be the messages whenever there is a new quest (everyone can call it on the interaction channel)
 
 ## Ressources
 

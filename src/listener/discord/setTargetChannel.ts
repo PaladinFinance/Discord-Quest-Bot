@@ -1,5 +1,4 @@
 import fs from 'fs';
-import getTextChannelIdFromName from '../../scripts/getTextChannelIdFromName';
 import client from '../../config/client';
 
 const setTargetChannel = (command: string, dataType: string) => {
@@ -18,11 +17,11 @@ const setTargetChannel = (command: string, dataType: string) => {
         if (args.length !== expectedNbArgs) {
           msg.reply(`${command} takes ${expectedNbArgs} arguments`);
         } else {
-          const channelId = getTextChannelIdFromName(args[1]);
-          if (!channelId) {
+          const channel = client.channels.cache.get(args[1].replace('<#', '').replace('>', ''));
+          if (!channel) {
             msg.reply(`${args[1]} is not a valid channel name`);
           } else {
-            data[dataType] = getTextChannelIdFromName(args[1]);
+            data[dataType] = channel.id;
             fs.writeFileSync('./src/data/data.json', JSON.stringify(data));
             msg.reply('target channel set');
             console.log(`${dataType} set to ${data[dataType]}`);
