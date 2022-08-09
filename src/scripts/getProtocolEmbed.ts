@@ -5,20 +5,27 @@ import getSymbolFromToken from './getSymbolFromToken';
 import getTotalPricePerToken from './getTotalPricePerToken';
 import getTotalRewardToken from './getTotalRewardToken';
 
-const getBalancerEmbed = async (
+export enum ProtocolType {
+  Curve,
+  Balancer,
+}
+
+export const getProtocolEmbed = async (
   gauge: string,
   rewardToken: string,
   objectiveVotes: BigNumber,
   rewardPerVote: BigNumber,
+  protocol: ProtocolType,
 ): Promise<APIEmbed> => {
   const gaugeSymbol = await getSymbolFromGauge(gauge);
   const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
   const totalRewardToken = getTotalRewardToken(objectiveVotes, rewardPerVote);
   const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
+  const protocolName = protocol === ProtocolType.Curve ? 'veCRV' : 'veBAL';
 
   const exampleEmbed = {
-    color: 0x00000,
-    title: `New veBAL Quest: ${gaugeSymbol}`,
+    color: 0xfffff,
+    title: `New ${protocolName} Quest: ${gaugeSymbol}`,
     url: 'http://app.warden.vote/quest/',
     description: `$${rewardTokenSymbol} rewards are now available on app.warden.vote\n\n${totalRewardToken.toString()} $${rewardTokenSymbol} ($${totalPrice.toFixed(
       3,
@@ -27,5 +34,3 @@ const getBalancerEmbed = async (
   };
   return exampleEmbed;
 };
-
-export default getBalancerEmbed;

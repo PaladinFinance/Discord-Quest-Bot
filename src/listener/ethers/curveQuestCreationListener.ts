@@ -3,7 +3,7 @@ import { Listener } from '@ethersproject/abstract-provider';
 import fs from 'fs';
 import client from '../../config/client';
 import { ChannelType } from 'discord.js';
-import getCurveEmbed from '../../scripts/getCurveEmbed';
+import { getProtocolEmbed, ProtocolType } from '../../scripts/getProtocolEmbed';
 
 const questCreationListener: Listener = async (
   questID,
@@ -24,7 +24,13 @@ const questCreationListener: Listener = async (
     );
 
     const channel = client.channels.cache.get(data.targetChannelId);
-    const exampleEmbed = await getCurveEmbed(gauge, rewardToken, objectiveVotes, rewardPerVote);
+    const exampleEmbed = await getProtocolEmbed(
+      gauge,
+      rewardToken,
+      objectiveVotes,
+      rewardPerVote,
+      ProtocolType.Curve,
+    );
     if (channel?.type === ChannelType.GuildText) channel.send({ embeds: [exampleEmbed] });
   } catch (err) {
     console.error(err);
