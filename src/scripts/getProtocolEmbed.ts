@@ -30,9 +30,15 @@ export const getProtocolEmbed = async (
     color: 0xfffff,
     title: `New ${protocolName} Quest: ${gaugeSymbol}`,
     url: `http://app.warden.vote/quest/?${protocolURI}`,
-    description: `$${rewardTokenSymbol} rewards are now available on app.warden.vote\n\n${totalRewardToken.toString()} $${rewardTokenSymbol} ($${totalPrice.toFixed(
-      3,
-    )}) can be captured by users who vote for ${gaugeSymbol}`,
+    description: `$${rewardTokenSymbol} rewards are now available on app.warden.vote\n\n${totalRewardToken
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} $${rewardTokenSymbol} ($${totalPrice
+      .toFixed(3)
+      .toString()
+      .replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ',',
+      )}) can be captured by users who vote for ${gaugeSymbol}`,
     timestamp: new Date().toISOString(),
   };
   return exampleEmbed;
