@@ -29,6 +29,8 @@ const questCreationListener: Listener = async (
       rewardToken,
       objectiveVotes,
       rewardPerVote,
+      duration,
+      startPeriod,
       ProtocolType.Curve,
     );
     if (channel?.type === ChannelType.GuildText) channel.send({ embeds: [exampleEmbed] });

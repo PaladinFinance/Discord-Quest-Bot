@@ -5,6 +5,7 @@ import getSymbolFromToken from './getSymbolFromToken';
 import getTotalPricePerToken from './getTotalPricePerToken';
 import getTotalRewardToken from './getTotalRewardToken';
 import getDecimalsFromToken from './getDecimalsFromToken';
+import moment from 'moment';
 
 export enum ProtocolType {
   Curve,
@@ -16,6 +17,8 @@ export const getProtocolEmbed = async (
   rewardToken: string,
   objectiveVotes: BigNumber,
   rewardPerVote: BigNumber,
+  duration: BigNumber,
+  startPeriod: BigNumber,
   protocol: ProtocolType,
 ): Promise<APIEmbed> => {
   const gaugeSymbol = await getSymbolFromGauge(gauge);
@@ -30,7 +33,9 @@ export const getProtocolEmbed = async (
     color: 0xfffff,
     title: `New ${protocolName} Quest: ${gaugeSymbol}`,
     url: `http://app.warden.vote/quest/?${protocolURI}`,
-    description: `$${rewardTokenSymbol} rewards are now available on app.warden.vote\n\n${totalRewardToken
+    description: `Starting ${moment
+      .unix(startPeriod.toNumber())
+      .format('D MMMM YYYY')} for ${duration.toString()} weeks\n\n${totalRewardToken
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} $${rewardTokenSymbol} ($${totalPrice
       .toFixed(3)
