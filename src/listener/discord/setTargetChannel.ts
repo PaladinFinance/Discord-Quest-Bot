@@ -29,8 +29,6 @@ const setTargetChannel = (command: string, dataType: string) => {
             data[dataType] = channel.id;
             fs.writeFileSync('./src/data/data.json', JSON.stringify(data));
             msg.reply('target channel set');
-            const message = channel.send("wow");
-            (await message).crosspost();
             console.log(`${dataType} set to ${data[dataType]}`);
           }
         }

@@ -34,8 +34,8 @@ const questCreationListener: Listener = async (
       ProtocolType.Curve,
     );
     if (channel?.type === ChannelType.GuildNews) {
-      const message = channel.send({ embeds: [exampleEmbed] });
-      (await message).crosspost();
+      const message = await channel.send({ embeds: [exampleEmbed] });
+      message.crosspost();
     }
   } catch (err) {
     console.error(err);

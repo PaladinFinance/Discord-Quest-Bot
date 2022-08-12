@@ -1,6 +1,6 @@
 # Discord-Quest-Bot
 
-Discord bot that send a message to a specific channel whenever there is a new quest being created for **Curve** or **Balancer**
+Discord bot that send a message to a specific announcement channel whenever there is a new quest being created for **Curve** or **Balancer**
 
 <div align="center">
   <img src=".github/assets/paladin-bot-message-example.png" width="80%" />
@@ -22,7 +22,7 @@ yarn
 
 This will install all the depdencies needed for the project such as `discordjs`, `etherjs` ...
 
-You will need a discord bot so I suggest you create one following a tutorial like this [one](https://www.xda-developers.com/how-to-create-discord-bot/) and don't forget to invite to your server with tha ability to at least read and write messages into text channels
+You will need a discord bot so I suggest you create one following a tutorial like this [one](https://www.xda-developers.com/how-to-create-discord-bot/) and don't forget to invite to your server with a link of this form `https://discord.com/oauth2/authorize?client_id=BOT_ID&scope=bot&permissions=93184`. On top of that you will need to give the permission to the bot to send a message in the target channel.
 
 ## Start
 
