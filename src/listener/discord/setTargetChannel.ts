@@ -4,7 +4,7 @@ import client from '../../config/client';
 
 const setTargetChannel = (command: string, dataType: string) => {
   try {
-    client.on('messageCreate', async (msg) => {
+    client.on('messageCreate', (msg) => {
       const data = JSON.parse(
         fs.readFileSync('./src/data/data.json', {
           encoding: 'utf8',
@@ -29,6 +29,8 @@ const setTargetChannel = (command: string, dataType: string) => {
             data[dataType] = channel.id;
             fs.writeFileSync('./src/data/data.json', JSON.stringify(data));
             msg.reply('target channel set');
+            const message = channel.send("wow");
+            (await message).crosspost();
             console.log(`${dataType} set to ${data[dataType]}`);
           }
         }
