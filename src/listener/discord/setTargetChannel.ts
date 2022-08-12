@@ -1,9 +1,10 @@
+import { ChannelType } from 'discord.js';
 import fs from 'fs';
 import client from '../../config/client';
 
 const setTargetChannel = (command: string, dataType: string) => {
   try {
-    client.on('messageCreate', (msg) => {
+    client.on('messageCreate', async (msg) => {
       const data = JSON.parse(
         fs.readFileSync('./src/data/data.json', {
           encoding: 'utf8',
@@ -21,6 +22,10 @@ const setTargetChannel = (command: string, dataType: string) => {
           if (!channel) {
             msg.reply(`${args[1]} is not a valid channel name`);
           } else {
+            if (channel.type !== ChannelType.GuildNews) {
+              msg.reply(`${args[1]} is not a announcement channel`);
+              return;
+            }
             data[dataType] = channel.id;
             fs.writeFileSync('./src/data/data.json', JSON.stringify(data));
             msg.reply('target channel set');

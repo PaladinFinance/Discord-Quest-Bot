@@ -33,7 +33,10 @@ const questCreationListener: Listener = async (
       startPeriod,
       ProtocolType.Balancer,
     );
-    if (channel?.type === ChannelType.GuildText) channel.send({ embeds: [exampleEmbed] });
+    if (channel?.type === ChannelType.GuildNews) {
+      const message = channel.send({ embeds: [exampleEmbed] });
+      (await message).crosspost();
+    }
   } catch (err) {
     console.error(err);
   }
