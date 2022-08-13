@@ -23,7 +23,7 @@ const questCreationListener: Listener = async (
       }),
     );
 
-    const channel = client.channels.cache.get(data.targetChannelId);
+    const channel = client.channels.cache.get(data.curveTargetChannelId);
     const exampleEmbed = await getProtocolEmbed(
       gauge,
       rewardToken,

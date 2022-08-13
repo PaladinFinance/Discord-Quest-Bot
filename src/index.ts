@@ -7,7 +7,8 @@ import curveQuestCreationListener from './listener/ethers/curveQuestCreationList
 import data from './data/data.json';
 
 setInteractionChannel('!here', 'interactionChannelId', 'Paladin');
-setTargetChannel('!target', 'targetChannelId');
+setTargetChannel('!balTarget', 'balancerTargetChannelId');
+setTargetChannel('!crvTarget', 'curveTargetChannelId');
 createEtherEventListener(
   data.veBALQuestBoardContractAddress,
   QuestBoardAbi,
