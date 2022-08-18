@@ -1,7 +1,6 @@
 {
-    "interactionChannelId": "937838160103219230",
-    "curveTargetChannelId": "1008049103793561670",
-    "balancerTargetChannelId": "1008049911624913018",
-    "veCRVQuestBoardContractAddress": "0xA6Ed52EB3e39891CE5029817CdB5eAc97A2834B3",
-    "veBALQuestBoardContractAddress": "0x8b2ba835056965808aD88e7Ad7866BD57aE75839"
+  "curveTargetChannelIds": ["1008049103793561670"],
+  "balancerTargetChannelIds": ["1008049911624913018"],
+  "veCRVQuestBoardContractAddress": "0xA6Ed52EB3e39891CE5029817CdB5eAc97A2834B3",
+  "veBALQuestBoardContractAddress": "0x8b2ba835056965808aD88e7Ad7866BD57aE75839"
 }

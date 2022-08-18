@@ -1,23 +1,18 @@
-import setInteractionChannel from './listener/discord/setInteractionChannel';
-import setTargetChannel from './listener/discord/setTargetChannel';
 import createEtherEventListener from './scripts/createEtherEventListener';
 import QuestBoardAbi from './data/abi/QuestBoardAbi.json';
-import balancerQuestCreationListener from './listener/ethers/balancerQuestCreationListener';
-import curveQuestCreationListener from './listener/ethers/curveQuestCreationListener';
+import questCreationListener from './listener/ethers/questCreationListener';
 import data from './data/data.json';
+import { ProtocolType } from './scripts/getProtocolEmbed';
 
-setInteractionChannel('!here', 'interactionChannelId', 'Paladin');
-setTargetChannel('!balTarget', 'balancerTargetChannelId');
-setTargetChannel('!crvTarget', 'curveTargetChannelId');
 createEtherEventListener(
   data.veBALQuestBoardContractAddress,
   QuestBoardAbi,
   'NewQuest',
-  balancerQuestCreationListener,
+  questCreationListener(ProtocolType.Balancer),
 );
 createEtherEventListener(
   data.veCRVQuestBoardContractAddress,
   QuestBoardAbi,
   'NewQuest',
-  curveQuestCreationListener,
+  questCreationListener(ProtocolType.Curve),
 );
