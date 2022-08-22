@@ -1,6 +1,6 @@
 {
   "curveTargetChannelIds": ["1008049103793561670"],
-  "balancerTargetChannelIds": ["1008049911624913018"],
+  "balancerTargetChannelIds": ["1008049911624913018", "999427452789067926"],
   "veCRVQuestBoardContractAddress": "0xA6Ed52EB3e39891CE5029817CdB5eAc97A2834B3",
   "veBALQuestBoardContractAddress": "0x8b2ba835056965808aD88e7Ad7866BD57aE75839"
 }
