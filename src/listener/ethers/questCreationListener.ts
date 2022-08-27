@@ -52,6 +52,7 @@ const questCreationListener =
           console.error(`Channel ${channelId} not found.`);
         }
       });
+      console.log(`New ${protocolType} quest created.`);
     } catch (err) {
       console.error(err);
     }
