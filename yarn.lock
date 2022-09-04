@@ -505,6 +505,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/node-cron@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/node-cron/-/node-cron-3.0.3.tgz#6d7a7bebecb20d83c850421d4d3178a7555be538"
+  integrity sha512-FPzux/llEiCe5mPn3TvLEORcF2pRXvH5cugtJCJf+UrkwQ7pYfb4wn9J/sxJ8QkT/sw9BjWSi9uur5Vh1OuAZQ==
+
 "@types/node@*":
   version "18.6.3"
   resolved "https://registry.npmjs.org/@types/node/-/node-18.6.3.tgz"
@@ -1721,6 +1726,13 @@ natural-compare@^1.4.0:
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+node-cron@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/node-cron/-/node-cron-3.0.2.tgz#bb0681342bd2dfb568f28e464031280e7f06bd01"
+  integrity sha512-iP8l0yGlNpE0e6q1o185yOApANRe47UPbLf4YxfbiNHt/RU5eBcGB/e0oudruheSf+LQeDMezqC5BVAb5wwRcQ==
+  dependencies:
+    uuid "8.3.2"
+
 object-inspect@^1.12.0, object-inspect@^1.9.0:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.12.2.tgz#c0641f26394532f28ab8d796ab954e43c009a8ea"
@@ -2172,6 +2184,11 @@ util-deprecate@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
+
+uuid@8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
