@@ -19,6 +19,6 @@ createEtherEventListener(
   questCreationListener(ProtocolType.Curve),
 );
 
-cron.schedule('0 0 * * 0', async () => {
+cron.schedule('0 0 * * 4', async () => {
   await setStatusForAvailableQuests();
 });
