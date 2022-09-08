@@ -11,9 +11,11 @@ const setStatusForAvailableQuests = async () => {
       }),
     );
 
-    const balQuestsNb = await getAvailableQuestsForPeriod(data.veBALQuestBoardContractAddress);
-    const crvQuestsNb = await getAvailableQuestsForPeriod(data.veCRVQuestBoardContractAddress);
-    setBotStatus(`${crvQuestsNb} CRV / ${balQuestsNb} BAL Quests`);
+    const balQuestsNb =  getAvailableQuestsForPeriod(data.veBALQuestBoardContractAddress);
+    const crvQuestsNb = getAvailableQuestsForPeriod(data.veCRVQuestBoardContractAddress);
+
+    const questsNb = await Promise.all([crvQuestsNb, balQuestsNb]);
+    setBotStatus(`${questsNb[0]} CRV / ${questsNb[1]} BAL Quests`);
   } catch (err) {
     console.error(err);
   }
