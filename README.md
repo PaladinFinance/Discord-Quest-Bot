@@ -31,7 +31,7 @@ This will install all the depdencies needed for the project such as `discordjs`,
 
 - First you need to set environment variables in the .env
 - Then you can set the contract addresses for the two QuestBoard as *veCRVQuestBoardContractAddress* and *veBALQuestBoardContractAddress* inside the [data file](./src/data/data.json)
-- In the same file you can set the discord channel id where you want the bot to send the message in *balancerTargetChannelIds* and *curveTargetChannelIds*
+- In the same file you can set the discord channel ids where you want the bot to send the message in *balancerTargetChannelIds* and *curveTargetChannelIds*. You can get the channel id using [this](https://turbofuture.com/internet/Discord-Channel-ID) tutorial
 - Finally you can start the discord bot with `yarn start`
 
 ## Ressources
