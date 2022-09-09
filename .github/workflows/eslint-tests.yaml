@@ -1,6 +1,6 @@
 name: Eslint tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   eslint:
@@ -14,11 +14,4 @@ jobs:
         run: yarn
 
       - name: Run eslint
-        run: yarn lint > eslint-results
-
-      - name: Get eslint results
-        uses: actions/upload-artifact@v1
-        if: always()
-        with:
-          name: eslint-results
-          path: eslint-results
+        run: yarn lint
