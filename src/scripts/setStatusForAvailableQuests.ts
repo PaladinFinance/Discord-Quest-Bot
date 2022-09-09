@@ -11,7 +11,7 @@ const setStatusForAvailableQuests = async () => {
       }),
     );
 
-    const balQuestsNb =  getAvailableQuestsForPeriod(data.veBALQuestBoardContractAddress);
+    const balQuestsNb = getAvailableQuestsForPeriod(data.veBALQuestBoardContractAddress);
     const crvQuestsNb = getAvailableQuestsForPeriod(data.veCRVQuestBoardContractAddress);
 
     const questsNb = await Promise.all([crvQuestsNb, balQuestsNb]);
