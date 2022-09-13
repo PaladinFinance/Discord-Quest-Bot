@@ -28,9 +28,10 @@ export const getProtocolEmbed = async (
   const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
   const protocolName = protocol === ProtocolType.Curve ? 'veCRV' : 'veBAL';
   const protocolURI = protocol === ProtocolType.Curve ? 'protocol=crv' : 'protocol=bal';
+  const embedColor = protocol === ProtocolType.Curve ? 0xfffff : 0x00000;
 
   const exampleEmbed = {
-    color: 0xfffff,
+    color: embedColor,
     title: `New ${protocolName} Quest: ${gaugeSymbol}`,
     url: `http://app.warden.vote/quest/?${protocolURI}`,
     description: `Starting ${moment
