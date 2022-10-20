@@ -7,13 +7,13 @@ import { ProtocolType } from './scripts/getProtocolEmbed';
 import setStatusForAvailableQuests from './scripts/setStatusForAvailableQuests';
 
 createEtherEventListener(
-  data.veBALQuestBoardContractAddress,
+  data.veBALQuestBoardContractAddresses,
   QuestBoardAbi,
   'NewQuest',
   questCreationListener(ProtocolType.Balancer),
 );
 createEtherEventListener(
-  data.veCRVQuestBoardContractAddress,
+  data.veCRVQuestBoardContractAddresses,
   QuestBoardAbi,
   'NewQuest',
   questCreationListener(ProtocolType.Curve),

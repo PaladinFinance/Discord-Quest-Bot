@@ -3,17 +3,21 @@ import { WEEK } from '../globals/time';
 import provider from '../config/etherProvider';
 import QuestBoardAbi from '../data/abi/QuestBoardAbi.json';
 
-const getAvailableQuestsForPeriod = async (address: string): Promise<BigNumber> => {
-  try {
-    const contract = new Contract(address, QuestBoardAbi, provider);
-    const availableQuestsNb = await contract.getQuestIdsForPeriod(
-      BigNumber.from(Date.now()).div(1000).div(WEEK).mul(WEEK),
-    );
-    return availableQuestsNb.length;
-  } catch (err) {
-    console.error(err);
-    return BigNumber.from(0);
-  }
+const getAvailableQuestsForPeriod = async (addresses: string[]): Promise<BigNumber> => {
+  let amount = BigNumber.from(0);
+
+  addresses.forEach(async (address) => {
+    try {
+      const contract = new Contract(address, QuestBoardAbi, provider);
+      const availableQuestsNb = await contract.getQuestIdsForPeriod(
+        BigNumber.from(Date.now()).div(1000).div(WEEK).mul(WEEK),
+      );
+      amount = amount.add(availableQuestsNb.length);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+  return amount;
 };
 
 export default getAvailableQuestsForPeriod;
