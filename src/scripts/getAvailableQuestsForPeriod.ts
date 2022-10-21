@@ -6,17 +6,19 @@ import QuestBoardAbi from '../data/abi/QuestBoardAbi.json';
 const getAvailableQuestsForPeriod = async (addresses: string[]): Promise<BigNumber> => {
   let amount = BigNumber.from(0);
 
-  addresses.forEach(async (address) => {
-    try {
-      const contract = new Contract(address, QuestBoardAbi, provider);
-      const availableQuestsNb = await contract.getQuestIdsForPeriod(
-        BigNumber.from(Date.now()).div(1000).div(WEEK).mul(WEEK),
-      );
-      amount = amount.add(availableQuestsNb.length);
-    } catch (err) {
-      console.error(err);
-    }
-  });
+  await Promise.all(
+    addresses.map(async (address) => {
+      try {
+        const contract = new Contract(address, QuestBoardAbi, provider);
+        const availableQuestsNb = await contract.getQuestIdsForPeriod(
+          BigNumber.from(Date.now()).div(1000).div(WEEK).mul(WEEK),
+        );
+        amount = amount.add(availableQuestsNb.length);
+      } catch (err) {
+        console.error(err);
+      }
+    }),
+  );
   return amount;
 };
 
