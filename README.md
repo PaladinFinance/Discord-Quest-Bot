@@ -1,6 +1,6 @@
 # Discord-Quest-Bot
 
-Discord bot that send a message to a specific announcement channel whenever there is a new quest being created for **Curve** or **Balancer**
+Discord bot that send a message to one or more text / announcement channels whenever there is a new quest being created for **Curve** or **Balancer** on [Warden](https://github.com/PaladinFinance/Warden-Quest).
 
 <div align="center">
   <img src=".github/assets/paladin-bot-message-example.png" width="80%" />
@@ -22,20 +22,17 @@ yarn
 
 This will install all the depdencies needed for the project such as `discordjs`, `etherjs` ...
 
-You will need a discord bot so I suggest you create one following a tutorial like this [one](https://www.xda-developers.com/how-to-create-discord-bot/) and don't forget to invite to your server with a link of this form `https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=93184`. On top of that you will need to give the permission to the bot to send a message in the target channel.
+- You will need a discord bot so I suggest you create one following a tutorial like this [one](https://www.xda-developers.com/how-to-create-discord-bot/).
+- Don't forget to invite to your server with a link of this form `https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=19456` which gives permission to the bot to **send messages**, **read messages / view channels** and **embed links**.
+- On top of that you will need to give the permission to the bot to send messages in the target channel if it is a announcement channel.
+- You can set the bot to public or private.
 
 ## Start
 
 - First you need to set environment variables in the .env
-- Then you can set the contract addresses for the two QuestBoard as veCRVQuestBoardContractAddress and veBALQuestBoardContractAddress inside the [data file](./src/data/data.json)
+- Then you can set the contract addresses for the two QuestBoard as *veCRVQuestBoardContractAddresses* and *veBALQuestBoardContractAddresses* inside the [data file](./src/data/data.json)
+- In the same file you can set the discord channel ids where you want the bot to send the message in *balancerTargetChannelIds* and *curveTargetChannelIds*. You can get the channel id using [this](https://turbofuture.com/internet/Discord-Channel-ID) tutorial
 - Finally you can start the discord bot with `yarn start`
-
-## Utilisation
-
-The bot so far has three commands:
-  - `!here` set the interaction channel to the one where you send the message so the channel where you can talk with the bot (only the Paladin role can call it)
-  - `!crvTarget #CHANNEL` set the curve target channel so where are going to be the messages whenever there is a new quest (everyone can call it on the interaction channel)
-  - `!balTarget #CHANNEL` set the balancer target channel so where are going to be the messages whenever there is a new quest (everyone can call it on the interaction channel)
 
 ## Ressources
 

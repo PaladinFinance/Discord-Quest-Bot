@@ -53,5 +53,24 @@
         ],
         "name": "NewQuest",
         "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "period",
+                "type": "uint256"
+            }
+        ],
+        "name": "getQuestIdsForPeriod",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     }
 ]
