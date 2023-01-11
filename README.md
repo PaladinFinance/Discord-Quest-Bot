@@ -3,7 +3,7 @@
 Discord bot that send a message to one or more text / announcement channels whenever there is a new quest being created for **Curve** or **Balancer** on [Warden](https://github.com/PaladinFinance/Warden-Quest).
 
 <div align="center">
-  <img src=".github/assets/paladin-bot-message-example.png" width="80%" />
+  <img src=".github/assets/paladin-bot-message-example.png" />
 </div>
 
 ## Dependencies & Installation
