@@ -1,0 +1,28 @@
+[
+    {
+        "inputs": [],
+        "name": "getRecipient",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getOptimismBridge",
+        "outputs": [
+            {
+                "internalType": "contract IL1StandardBridge",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
