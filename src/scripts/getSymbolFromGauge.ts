@@ -1,27 +1,20 @@
 import { Contract } from 'ethers';
 import etherProvider from '../config/etherProvider';
-import polygonProvider from '../config/polygonProvider';
-import optimismProvider from '../config/optimismProvider';
-import arbitrumProvider from '../config/arbitrumProvider';
 import erc20 from '../data/abi/erc20.json';
-import gaugePolygonRootAbi from '../data/abi/gaugePolygonRootAbi.json';
-import gaugeOptimismRootAbi from '../data/abi/gaugeOptimismRootAbi.json';
 import gaugeRootAbi from '../data/abi/gaugeRootAbi.json';
 import axios from 'axios';
 
-type Chain = 'polygon' | 'optimism' | 'arbitrum';
+type Chain = 'Polygon' | 'Optimism' | 'Arbitrum';
 
-const getPool = async (recipient: string, chain: Chain): Promise<string | undefined> => {
+const getSymbol = async (recipient: string, chain: Chain): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
-      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-${chain}`,
+      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-${chain.toLowerCase()}`,
       {
         query: `{
           liquidityGauges(where: {streamer: "${recipient}"}) {
-            pool {
-              id,
-            }
+            symbol
           }
         }`,
       },
@@ -31,32 +24,33 @@ const getPool = async (recipient: string, chain: Chain): Promise<string | undefi
     return;
   }
   if (!res.data.data.liquidityGauges[0]) return;
-  return res.data.data.liquidityGauges[0].pool.id;
+  return res.data.data.liquidityGauges[0].symbol;
 };
 
-const determineChain = async (gauge: string): Promise<Chain> => {
+const determineChain = async (gauge: string): Promise<Chain | undefined> => {
+  let res;
   try {
-    const gaugePolygonRootContract = new Contract(gauge, gaugePolygonRootAbi, etherProvider);
-    await gaugePolygonRootContract.getPolygonBridge();
-    return 'polygon';
+    res = await axios.post(
+      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
+      {
+        query: `{
+          rootGauges(where: {id: "${gauge.toLowerCase()}"}) {
+            chain
+          }
+        }`,
+      },
+    );
   } catch (e) {
-    console.error(gauge);
+    console.error(e);
+    return;
   }
-
-  try {
-    const gaugeOptimismRootContract = new Contract(gauge, gaugeOptimismRootAbi, etherProvider);
-    await gaugeOptimismRootContract.getOptimismBridge();
-    return 'optimism';
-  } catch (e) {}
-
-  return 'arbitrum';
+  if (!res.data.data.rootGauges[0]) return;
+  return res.data.data.rootGauges[0].chain;
 };
 
 const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined> => {
-  let symbol: string = '';
-  let recipient: string;
-
   // Get the pool address
+  let recipient: string;
   try {
     const gaugeRootContract = new Contract(gauge, gaugeRootAbi, etherProvider);
     recipient = await gaugeRootContract.getRecipient();
@@ -65,32 +59,12 @@ const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined
     return;
   }
 
+  // Determine the chain
   const chain = await determineChain(gauge);
+  if (!chain) return;
 
-  const pool = await getPool(recipient, chain);
-  if (!pool) return '';
-
-  // Get the symbol
-  try {
-    switch (chain) {
-      case 'polygon':
-        const poolPolygonContract = new Contract(pool, erc20, polygonProvider);
-        symbol = await poolPolygonContract.symbol();
-        break;
-      case 'optimism':
-        const poolOptimismContract = new Contract(pool, erc20, optimismProvider);
-        symbol = await poolOptimismContract.symbol();
-        break;
-      case 'arbitrum':
-        const poolArbitrumContract = new Contract(pool, erc20, arbitrumProvider);
-        symbol = await poolArbitrumContract.symbol();
-        break;
-      default:
-        break;
-    }
-  } catch (e) {
-    console.error(e);
-  }
+  // Get the pool address
+  const symbol = await getSymbol(recipient, chain);
   return symbol;
 };
 
