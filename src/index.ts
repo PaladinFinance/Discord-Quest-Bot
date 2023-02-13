@@ -5,6 +5,20 @@ import data from './data/data.json';
 import cron from 'node-cron';
 import { ProtocolType } from './scripts/getProtocolEmbed';
 import setStatusForAvailableQuests from './scripts/setStatusForAvailableQuests';
-import getSymbolFromGauge from './scripts/getSymbolFromGauge';
 
-getSymbolFromGauge("0xF0d887c1f5996C91402EB69Ab525f028DD5d7578");
+createEtherEventListener(
+  data.veBALQuestBoardContractAddresses,
+  QuestBoardAbi,
+  'NewQuest',
+  questCreationListener(ProtocolType.Balancer),
+);
+createEtherEventListener(
+  data.veCRVQuestBoardContractAddresses,
+  QuestBoardAbi,
+  'NewQuest',
+  questCreationListener(ProtocolType.Curve),
+);
+
+cron.schedule('0 0 * * 4', () => {
+  setStatusForAvailableQuests();
+});
