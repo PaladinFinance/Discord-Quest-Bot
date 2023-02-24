@@ -1,7 +1,6 @@
 import { Contract } from 'ethers';
 import etherProvider from '../config/etherProvider';
 import ERC20 from '../data/abi/ERC20.json';
-import BalancerGaugeRootAbi from '../data/abi/BalancerGaugeRootAbi.json';
 import CurveGaugeAbi from '../data/abi/CurveGaugeAbi.json';
 import axios from 'axios';
 import { ProtocolType } from './getProtocolEmbed';
@@ -13,7 +12,7 @@ const getSymbol = async (recipient: string, chain: string): Promise<string | und
       `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-${chain.toLowerCase()}`,
       {
         query: `{
-          liquidityGauges(where: {streamer: "${recipient}"}) {
+          liquidityGauge(where: {streamer: "${recipient}"}) {
             symbol
           }
         }`,
@@ -23,8 +22,8 @@ const getSymbol = async (recipient: string, chain: string): Promise<string | und
     console.error(e);
     return;
   }
-  if (!res.data.data.liquidityGauges[0]) return;
-  return res.data.data.liquidityGauges[0].symbol;
+  if (!res.data.data.liquidityGauge) return;
+  return res.data.data.liquidityGauge.symbol;
 };
 
 const determineChain = async (gauge: string): Promise<string | undefined> => {
@@ -34,7 +33,7 @@ const determineChain = async (gauge: string): Promise<string | undefined> => {
       `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
       {
         query: `{
-          rootGauges(where: {id: "${gauge.toLowerCase()}"}) {
+          rootGauge(where: {id: "${gauge.toLowerCase()}"}) {
             chain
           }
         }`,
@@ -44,20 +43,56 @@ const determineChain = async (gauge: string): Promise<string | undefined> => {
     console.error(e);
     return;
   }
-  if (!res.data.data.rootGauges[0]) return;
-  return res.data.data.rootGauges[0].chain;
+  if (!res.data.data.rootGauge) return;
+  return res.data.data.rootGauge.chain;
 };
 
-const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined> => {
-  // Get the pool address
-  let recipient: string;
+const getSymbolFromLiquidityGauge = async (gauge: string): Promise<string | undefined> => {
+  let res;
   try {
-    const gaugeRootContract = new Contract(gauge, BalancerGaugeRootAbi, etherProvider);
-    recipient = await gaugeRootContract.getRecipient();
+    res = await axios.post(
+      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
+      {
+        query: `{
+          liquidityGauge(where: {id: "${gauge.toLowerCase()}"}) {
+            symbol
+          }
+        }`,
+      },
+    );
   } catch (e) {
     console.error(e);
     return;
   }
+  if (!res.data.data.liquidityGauge) return;
+  return res.data.data.liquidityGauge.symbol;
+};
+
+const getRecipient = async (gauge: string) => {
+  let res;
+  try {
+    res = await axios.post(
+      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
+      {
+        query: `{
+          rootGauge(where: {id: "${gauge.toLowerCase()}"}) {
+            recipient
+          }
+        }`,
+      },
+    );
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+  if (!res.data.data.rootGauge) return;
+  return res.data.data.rootGauge.recipient;
+};
+
+const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined> => {
+  // Get the pool address
+  const recipient = await getRecipient(gauge);
+  if (!recipient) return;
 
   // Determine the chain
   const chain = await determineChain(gauge);
@@ -66,6 +101,16 @@ const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined
   // Get the pool address
   const symbol = await getSymbol(recipient, chain);
   return symbol;
+};
+
+const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
+  const mainetSymbol = await getSymbolFromLiquidityGauge(gauge);
+  if (mainetSymbol) return mainetSymbol;
+
+  const altSymbol = await getSymbolFromRootGauge(gauge);
+  if (altSymbol) return altSymbol;
+
+  return '';
 };
 
 const getSymbolFromCurveGauge = async (gauge: string): Promise<string> => {
@@ -79,19 +124,6 @@ const getSymbolFromCurveGauge = async (gauge: string): Promise<string> => {
     symbol = await lpContract.symbol();
   } catch (e) {
     console.error(e);
-  }
-  return symbol;
-};
-
-const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
-  let symbol: string = '';
-
-  try {
-    const gaugeContract = new Contract(gauge, ERC20, etherProvider);
-    symbol = await gaugeContract.symbol();
-  } catch (e) {
-    const expectedSymbol = await getSymbolFromRootGauge(gauge);
-    if (expectedSymbol) symbol = expectedSymbol;
   }
   return symbol;
 };
