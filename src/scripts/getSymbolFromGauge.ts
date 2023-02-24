@@ -12,8 +12,8 @@ const getSymbol = async (recipient: string, chain: string): Promise<string | und
       `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-${chain.toLowerCase()}`,
       {
         query: `{
-          liquidityGauge(where: {streamer: "${recipient}"}) {
-            symbol
+          liquidityGauges(where: {streamer: "${recipient}"}) {
+            symbol,
           }
         }`,
       },
@@ -22,8 +22,8 @@ const getSymbol = async (recipient: string, chain: string): Promise<string | und
     console.error(e);
     return;
   }
-  if (!res.data.data.liquidityGauge) return;
-  return res.data.data.liquidityGauge.symbol;
+  if (!res.data || !res.data.data || !res.data.data.liquidityGauges) return;
+  return res.data.data.liquidityGauges[0].symbol;
 };
 
 const determineChain = async (gauge: string): Promise<string | undefined> => {
@@ -33,7 +33,7 @@ const determineChain = async (gauge: string): Promise<string | undefined> => {
       `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
       {
         query: `{
-          rootGauge(where: {id: "${gauge.toLowerCase()}"}) {
+          rootGauge(id: "${gauge.toLowerCase()}") {
             chain
           }
         }`,
@@ -43,7 +43,7 @@ const determineChain = async (gauge: string): Promise<string | undefined> => {
     console.error(e);
     return;
   }
-  if (!res.data.data.rootGauge) return;
+  if (!res.data || !res.data.data || !res.data.data.rootGauge) return;
   return res.data.data.rootGauge.chain;
 };
 
@@ -54,7 +54,7 @@ const getSymbolFromLiquidityGauge = async (gauge: string): Promise<string | unde
       `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
       {
         query: `{
-          liquidityGauge(where: {id: "${gauge.toLowerCase()}"}) {
+          liquidityGauge(id: "${gauge.toLowerCase()}") {
             symbol
           }
         }`,
@@ -64,7 +64,7 @@ const getSymbolFromLiquidityGauge = async (gauge: string): Promise<string | unde
     console.error(e);
     return;
   }
-  if (!res.data.data.liquidityGauge) return;
+  if (!res.data || !res.data.data || !res.data.data.liquidityGauge) return;
   return res.data.data.liquidityGauge.symbol;
 };
 
@@ -75,7 +75,7 @@ const getRecipient = async (gauge: string) => {
       `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
       {
         query: `{
-          rootGauge(where: {id: "${gauge.toLowerCase()}"}) {
+          rootGauge(id: "${gauge.toLowerCase()}") {
             recipient
           }
         }`,
@@ -85,7 +85,7 @@ const getRecipient = async (gauge: string) => {
     console.error(e);
     return;
   }
-  if (!res.data.data.rootGauge) return;
+  if (!res.data || !res.data.data || !res.data.data.rootGauge) return;
   return res.data.data.rootGauge.recipient;
 };
 
