@@ -1,8 +1,10 @@
 import { Contract } from 'ethers';
 import etherProvider from '../config/etherProvider';
-import erc20 from '../data/abi/erc20.json';
-import gaugeRootAbi from '../data/abi/gaugeRootAbi.json';
+import ERC20 from '../data/abi/ERC20.json';
+import BalancerGaugeRootAbi from '../data/abi/BalancerGaugeRootAbi.json';
+import CurveGaugeAbi from '../data/abi/CurveGaugeAbi.json';
 import axios from 'axios';
+import { ProtocolType } from './getProtocolEmbed';
 
 type Chain = 'Polygon' | 'Optimism' | 'Arbitrum';
 
@@ -52,7 +54,7 @@ const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined
   // Get the pool address
   let recipient: string;
   try {
-    const gaugeRootContract = new Contract(gauge, gaugeRootAbi, etherProvider);
+    const gaugeRootContract = new Contract(gauge, BalancerGaugeRootAbi, etherProvider);
     recipient = await gaugeRootContract.getRecipient();
   } catch (e) {
     console.error(e);
@@ -68,17 +70,43 @@ const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined
   return symbol;
 };
 
-const getSymbolFromGauge = async (gauge: string): Promise<string> => {
+const getSymbolFromCurveGauge = async (gauge: string): Promise<string> => {
   let symbol: string = '';
 
   try {
-    const gaugeContract = new Contract(gauge, erc20, etherProvider);
+    const gaugeContract = new Contract(gauge, CurveGaugeAbi, etherProvider);
+    const lpAddress = await gaugeContract.lp_token();
+
+    const lpContract = new Contract(lpAddress, ERC20, etherProvider);
+    symbol = await lpContract.symbol();
+  } catch (e) {
+    console.error(e);
+  }
+  return symbol;
+};
+
+const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
+  let symbol: string = '';
+
+  try {
+    const gaugeContract = new Contract(gauge, ERC20, etherProvider);
     symbol = await gaugeContract.symbol();
   } catch (e) {
     const expectedSymbol = await getSymbolFromRootGauge(gauge);
     if (expectedSymbol) symbol = expectedSymbol;
   }
   return symbol;
+};
+
+const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return getSymbolFromBalancerGauge(gauge);
+    case ProtocolType.Curve:
+      return getSymbolFromCurveGauge(gauge);
+    default:
+      return '';
+  }
 };
 
 export default getSymbolFromGauge;
