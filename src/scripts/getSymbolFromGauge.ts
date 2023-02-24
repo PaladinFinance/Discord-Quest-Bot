@@ -6,9 +6,7 @@ import CurveGaugeAbi from '../data/abi/CurveGaugeAbi.json';
 import axios from 'axios';
 import { ProtocolType } from './getProtocolEmbed';
 
-type Chain = 'Polygon' | 'Optimism' | 'Arbitrum';
-
-const getSymbol = async (recipient: string, chain: Chain): Promise<string | undefined> => {
+const getSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
@@ -29,7 +27,7 @@ const getSymbol = async (recipient: string, chain: Chain): Promise<string | unde
   return res.data.data.liquidityGauges[0].symbol;
 };
 
-const determineChain = async (gauge: string): Promise<Chain | undefined> => {
+const determineChain = async (gauge: string): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
