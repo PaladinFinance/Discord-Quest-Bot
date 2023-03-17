@@ -21,7 +21,7 @@ export const getProtocolEmbed = async (
   startPeriod: BigNumber,
   protocol: ProtocolType,
 ): Promise<APIEmbed> => {
-  const gaugeSymbol = await getSymbolFromGauge(gauge).then((g) => g.replace('-gauge', ''));
+  const gaugeSymbol = await getSymbolFromGauge(gauge, protocol);
   const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
   const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
   const totalRewardToken = getTotalRewardToken(objectiveVotes, rewardPerVote, rewardTokenDecimals);
