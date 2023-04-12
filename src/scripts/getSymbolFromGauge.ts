@@ -1,7 +1,3 @@
-import { Contract } from 'ethers';
-import etherProvider from '../config/etherProvider';
-import ERC20 from '../data/abi/ERC20.json';
-import CurveGaugeAbi from '../data/abi/CurveGaugeAbi.json';
 import axios from 'axios';
 import { ProtocolType } from './getProtocolEmbed';
 
@@ -22,7 +18,13 @@ const getBalancerSymbol = async (recipient: string, chain: string): Promise<stri
     console.error(e);
     return;
   }
-  if (!res.data || !res.data.data || !res.data.data.liquidityGauges || res.data.data.liquidityGauges === 0) return;
+  if (
+    !res.data ||
+    !res.data.data ||
+    !res.data.data.liquidityGauges ||
+    res.data.data.liquidityGauges === 0
+  )
+    return;
   return res.data.data.liquidityGauges[0].symbol;
 };
 
@@ -113,14 +115,17 @@ const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   return '';
 };
 
-const getSymbolFromCurveLiquidityGauge = async (gauge: string, chain: string): Promise<string | undefined> => {
+const getSymbolFromCurveLiquidityGauge = async (
+  gauge: string,
+  chain: string,
+): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
       `https://api.thegraph.com/subgraphs/name/messari/curve-finance-${chain}`,
       {
         query: `{
-          liquidityPools(where: {_gaugeAddress: "${gauge.toLowerCase()}}") {
+          liquidityPools(where: {_gaugeAddress: "${gauge.toLowerCase()}"}) {
             symbol
           }
         }`,
@@ -130,15 +135,31 @@ const getSymbolFromCurveLiquidityGauge = async (gauge: string, chain: string): P
     console.error(e);
     return;
   }
-  if (!res.data || !res.data.data || !res.data.data.liquidityPools || res.data.data.liquidityPools.length === 0) return;
+  if (
+    !res.data ||
+    !res.data.data ||
+    !res.data.data.liquidityPools ||
+    res.data.data.liquidityPools.length === 0
+  )
+    return;
   return res.data.data.liquidityPools[0].symbol;
-}
+};
 
 const getSymbolFromCurveGauge = async (gauge: string): Promise<string> => {
-  const chains = ["ethereum", "fantom", "polygon", "avalanche", "arbitrum", "harmony", "optimism", "gnosis", "aurora"];
+  const chains = [
+    'ethereum',
+    'fantom',
+    'polygon',
+    'avalanche',
+    'arbitrum',
+    'harmony',
+    'optimism',
+    'gnosis',
+    'aurora',
+  ];
 
   for (const chain of chains) {
-    const symbol = getSymbolFromCurveLiquidityGauge(gauge, chain);
+    const symbol = await getSymbolFromCurveLiquidityGauge(gauge, chain);
     if (symbol) return symbol;
   }
   return '';
