@@ -115,52 +115,17 @@ const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   return '';
 };
 
-const getSymbolFromCurveLiquidityGauge = async (
-  gauge: string,
-  chain: string,
-): Promise<string | undefined> => {
-  let res;
+const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> => {
   try {
-    res = await axios.post(
-      `https://api.thegraph.com/subgraphs/name/messari/curve-finance-${chain}`,
-      {
-        query: `{
-          liquidityPools(where: {_gaugeAddress: "${gauge.toLowerCase()}"}) {
-            symbol
-          }
-        }`,
-      },
-    );
-  } catch (e) {
-    console.error(e);
-    return;
-  }
-  if (
-    !res.data ||
-    !res.data.data ||
-    !res.data.data.liquidityPools ||
-    res.data.data.liquidityPools.length === 0
-  )
-    return;
-  return res.data.data.liquidityPools[0].symbol;
-};
+    const res = await axios.get('https://api.curve.fi/api/getAllGauges');
 
-const getSymbolFromCurveGauge = async (gauge: string): Promise<string> => {
-  const chains = [
-    'ethereum',
-    'fantom',
-    'polygon',
-    'avalanche',
-    'arbitrum',
-    'harmony',
-    'optimism',
-    'gnosis',
-    'aurora',
-  ];
-
-  for (const chain of chains) {
-    const symbol = await getSymbolFromCurveLiquidityGauge(gauge, chain);
-    if (symbol) return symbol;
+    for (const gauge in res.data.data) {
+      if (res.data.data[gauge].gauge == expectedGauge) {
+        return res.data.data[gauge].shortName.split(' ')[0];
+      }
+    }
+  } catch (err) {
+    console.error(err);
   }
   return '';
 };
