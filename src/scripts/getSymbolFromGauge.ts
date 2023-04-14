@@ -120,7 +120,7 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
     const res = await axios.get('https://api.curve.fi/api/getAllGauges');
 
     for (const gauge in res.data.data) {
-      if (res.data.data[gauge].gauge == expectedGauge) {
+      if (res.data.data[gauge].gauge === expectedGauge) {
         return res.data.data[gauge].shortName.split(' ')[0];
       }
     }
