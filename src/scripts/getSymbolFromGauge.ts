@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ProtocolType } from './getProtocolEmbed';
+import { getAddress } from 'ethers/lib/utils';
 
 const getBalancerSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
   let res;
@@ -120,7 +121,7 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
     const res = await axios.get('https://api.curve.fi/api/getAllGauges');
 
     for (const gauge in res.data.data) {
-      if (res.data.data[gauge].gauge === expectedGauge) {
+      if (getAddress(res.data.data[gauge].gauge) === expectedGauge) {
         return res.data.data[gauge].shortName.split(' ')[0];
       }
     }
