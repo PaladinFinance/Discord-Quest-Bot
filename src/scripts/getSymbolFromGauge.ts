@@ -1,11 +1,8 @@
-import { Contract } from 'ethers';
-import etherProvider from '../config/etherProvider';
-import ERC20 from '../data/abi/ERC20.json';
-import CurveGaugeAbi from '../data/abi/CurveGaugeAbi.json';
 import axios from 'axios';
 import { ProtocolType } from './getProtocolEmbed';
+import { getAddress } from 'ethers/lib/utils';
 
-const getSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
+const getBalancerSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
@@ -22,11 +19,17 @@ const getSymbol = async (recipient: string, chain: string): Promise<string | und
     console.error(e);
     return;
   }
-  if (!res.data || !res.data.data || !res.data.data.liquidityGauges) return;
+  if (
+    !res.data ||
+    !res.data.data ||
+    !res.data.data.liquidityGauges ||
+    res.data.data.liquidityGauges === 0
+  )
+    return;
   return res.data.data.liquidityGauges[0].symbol;
 };
 
-const determineChain = async (gauge: string): Promise<string | undefined> => {
+const determineBalancerChain = async (gauge: string): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
@@ -47,7 +50,7 @@ const determineChain = async (gauge: string): Promise<string | undefined> => {
   return res.data.data.rootGauge.chain;
 };
 
-const getSymbolFromLiquidityGauge = async (gauge: string): Promise<string | undefined> => {
+const getSymbolFromBalancerLiquidityGauge = async (gauge: string): Promise<string | undefined> => {
   let res;
   try {
     res = await axios.post(
@@ -68,7 +71,7 @@ const getSymbolFromLiquidityGauge = async (gauge: string): Promise<string | unde
   return res.data.data.liquidityGauge.symbol;
 };
 
-const getRecipient = async (gauge: string) => {
+const getBalancerRecipient = async (gauge: string) => {
   let res;
   try {
     res = await axios.post(
@@ -89,43 +92,43 @@ const getRecipient = async (gauge: string) => {
   return res.data.data.rootGauge.recipient;
 };
 
-const getSymbolFromRootGauge = async (gauge: string): Promise<string | undefined> => {
+const getSymbolFromBalancerRootGauge = async (gauge: string): Promise<string | undefined> => {
   // Get the pool address
-  const recipient = await getRecipient(gauge);
+  const recipient = await getBalancerRecipient(gauge);
   if (!recipient) return;
 
   // Determine the chain
-  const chain = await determineChain(gauge);
+  const chain = await determineBalancerChain(gauge);
   if (!chain) return;
 
   // Get the pool address
-  const symbol = await getSymbol(recipient, chain);
+  const symbol = await getBalancerSymbol(recipient, chain);
   return symbol;
 };
 
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
-  const mainetSymbol = await getSymbolFromLiquidityGauge(gauge);
+  const mainetSymbol = await getSymbolFromBalancerLiquidityGauge(gauge);
   if (mainetSymbol) return mainetSymbol;
 
-  const altSymbol = await getSymbolFromRootGauge(gauge);
+  const altSymbol = await getSymbolFromBalancerRootGauge(gauge);
   if (altSymbol) return altSymbol;
 
   return '';
 };
 
-const getSymbolFromCurveGauge = async (gauge: string): Promise<string> => {
-  let symbol: string = '';
-
+const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> => {
   try {
-    const gaugeContract = new Contract(gauge, CurveGaugeAbi, etherProvider);
-    const lpAddress = await gaugeContract.lp_token();
+    const res = await axios.get('https://api.curve.fi/api/getAllGauges');
 
-    const lpContract = new Contract(lpAddress, ERC20, etherProvider);
-    symbol = await lpContract.symbol();
-  } catch (e) {
-    console.error(e);
+    for (const gauge in res.data.data) {
+      if (getAddress(res.data.data[gauge].gauge) === expectedGauge) {
+        return res.data.data[gauge].shortName.split(' ')[0];
+      }
+    }
+  } catch (err) {
+    console.error(err);
   }
-  return symbol;
+  return '';
 };
 
 const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
