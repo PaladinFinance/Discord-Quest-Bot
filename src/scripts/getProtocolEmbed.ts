@@ -10,6 +10,7 @@ import moment from 'moment';
 export enum ProtocolType {
   Curve,
   Balancer,
+  Bunni,
 }
 
 export const getProtocolEmbed = async (
