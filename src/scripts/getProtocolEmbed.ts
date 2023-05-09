@@ -24,7 +24,7 @@ const getProtocolName = (protocol: ProtocolType): string => {
     default:
       return '';
   }
-}
+};
 
 const getProtocolURI = (protocol: ProtocolType): string => {
   switch (protocol) {
@@ -37,7 +37,7 @@ const getProtocolURI = (protocol: ProtocolType): string => {
     default:
       return '';
   }
-}
+};
 
 const getEmbedColor = (protocol: ProtocolType): number => {
   switch (protocol) {
@@ -50,7 +50,7 @@ const getEmbedColor = (protocol: ProtocolType): number => {
     default:
       return 0x00000;
   }
-}
+};
 
 export const getProtocolEmbed = async (
   gauge: string,

@@ -137,15 +137,15 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
 
 const getLpTokenAddressFromBunniGauge = async (gauge: string): Promise<string> => {
   const gaugeContract = new Contract(gauge, BunniGauge, provider);
-  const lpAddress = await gaugeContract.lp_token(); 
+  const lpAddress = await gaugeContract.lp_token();
   return lpAddress;
-}
+};
 
 const getNameFromLpToken = async (lpToken: string): Promise<string> => {
   const lpTokenContract = new Contract(lpToken, ERC20, provider);
-  const name = await lpTokenContract.name(); 
+  const name = await lpTokenContract.name();
   return name;
-}
+};
 
 const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> => {
   try {
@@ -156,7 +156,7 @@ const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> =
     console.error(err);
   }
   return '';
-}
+};
 
 const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
   switch (protocol) {
