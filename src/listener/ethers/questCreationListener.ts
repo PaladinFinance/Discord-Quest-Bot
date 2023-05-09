@@ -45,7 +45,7 @@ const questCreationListener =
         const channel = client.channels.cache.get(channelId);
         if (
           channel &&
-          (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildNews)
+          (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildAnnouncement)
         ) {
           await channel.send({ embeds: [embed] });
         } else {
