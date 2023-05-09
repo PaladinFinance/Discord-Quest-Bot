@@ -13,6 +13,45 @@ export enum ProtocolType {
   Bunni,
 }
 
+const getProtocolName = (protocol: ProtocolType): string => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return 'veBAL';
+    case ProtocolType.Curve:
+      return 'veCRV';
+    case ProtocolType.Bunni:
+      return 'veLIT';
+    default:
+      return '';
+  }
+}
+
+const getProtocolURI = (protocol: ProtocolType): string => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return 'protocol=bal';
+    case ProtocolType.Curve:
+      return 'protocol=crv';
+    case ProtocolType.Bunni:
+      return 'protocol=lit';
+    default:
+      return '';
+  }
+}
+
+const getEmbedColor = (protocol: ProtocolType): number => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return 0x00000;
+    case ProtocolType.Curve:
+      return 0xfffff;
+    case ProtocolType.Bunni:
+      return 0x800080;
+    default:
+      return 0x00000;
+  }
+}
+
 export const getProtocolEmbed = async (
   gauge: string,
   rewardToken: string,
@@ -27,9 +66,9 @@ export const getProtocolEmbed = async (
   const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
   const totalRewardToken = getTotalRewardToken(objectiveVotes, rewardPerVote, rewardTokenDecimals);
   const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
-  const protocolName = protocol === ProtocolType.Curve ? 'veCRV' : 'veBAL';
-  const protocolURI = protocol === ProtocolType.Curve ? 'protocol=crv' : 'protocol=bal';
-  const embedColor = protocol === ProtocolType.Curve ? 0xfffff : 0x00000;
+  const protocolName = getProtocolName(protocol);
+  const protocolURI = getProtocolURI(protocol);
+  const embedColor = getEmbedColor(protocol);
   const totalRewardTokenFormatted = totalRewardToken
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
