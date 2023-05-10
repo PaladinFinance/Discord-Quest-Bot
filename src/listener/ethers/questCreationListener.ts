@@ -6,6 +6,19 @@ import { ChannelType } from 'discord.js';
 import { getProtocolEmbed, ProtocolType } from '../../scripts/getProtocolEmbed';
 import { BigNumber } from 'ethers';
 
+const getChannels = (protocol: ProtocolType, data: any): string[] => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return data.balancerTargetChannelIds;
+    case ProtocolType.Bunni:
+      return data.bunniTargetChannelIds;
+    case ProtocolType.Curve:
+      return data.curveTargetChannelIds;
+    default:
+      return [];
+  }
+}
+
 const questCreationListener =
   (protocolType: ProtocolType): Listener =>
   async (
@@ -36,10 +49,7 @@ const questCreationListener =
         protocolType,
       );
 
-      const channels =
-        protocolType === ProtocolType.Curve
-          ? data.curveTargetChannelIds
-          : data.balancerTargetChannelIds;
+      const channels = getChannels(protocolType, data);
 
       channels.forEach(async (channelId: string) => {
         const channel = client.channels.cache.get(channelId);
