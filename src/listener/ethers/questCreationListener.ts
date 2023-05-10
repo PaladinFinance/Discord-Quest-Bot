@@ -17,7 +17,7 @@ const getChannels = (protocol: ProtocolType, data: any): string[] => {
     default:
       return [];
   }
-}
+};
 
 const questCreationListener =
   (protocolType: ProtocolType): Listener =>
