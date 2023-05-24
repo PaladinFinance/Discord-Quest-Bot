@@ -1,6 +1,11 @@
 import { TwitterApi } from 'twitter-api-v2';
 
-if (!process.env.TWITTER_API_KEY || !process.env.TWITTER_API_SECRET || !process.env.TWITTER_ACCESS_TOKEN || !process.env.TWITTER_ACCESS_SECRET) {
+if (
+  !process.env.TWITTER_API_KEY ||
+  !process.env.TWITTER_API_SECRET ||
+  !process.env.TWITTER_ACCESS_TOKEN ||
+  !process.env.TWITTER_ACCESS_SECRET
+) {
   throw new Error('No twitter secrets available');
 }
 

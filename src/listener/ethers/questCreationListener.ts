@@ -21,14 +21,7 @@ const questCreationListener =
     rewardPerVote: BigNumber,
   ) => {
     try {
-      const tweet = await getTweet(
-        gauge,
-        rewardToken,
-        objectiveVotes,
-        rewardPerVote,
-        startPeriod,
-        protocolType,
-      );
+      const tweet = await getTweet(gauge, rewardToken, objectiveVotes, rewardPerVote, protocolType);
 
       await twitterClient.v2.tweet(tweet);
 
