@@ -1,6 +1,6 @@
 import { ChannelType } from 'discord.js';
 import fs from 'fs';
-import client from '../../config/client';
+import client from '../../config/discordClient';
 
 const setTargetChannel = (command: string, dataType: string) => {
   try {

@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Listener } from '@ethersproject/abstract-provider';
 import fs from 'fs';
-import client from '../../config/client';
+import client from '../../config/discordClient';
 import { ChannelType } from 'discord.js';
 import { getProtocolEmbed, ProtocolType } from '../../scripts/getProtocolEmbed';
 import { BigNumber } from 'ethers';

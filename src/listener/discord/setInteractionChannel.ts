@@ -1,6 +1,6 @@
 import fs from 'fs';
 import checkHasRole from '../../scripts/checkHasRole';
-import client from '../../config/client';
+import client from '../../config/discordClient';
 
 const setInteractionChannel = (command: string, dataType: string, roleNeeded: string) => {
   try {

@@ -1,5 +1,5 @@
 import { ChannelType, TextChannel } from 'discord.js';
-import client from '../config/client';
+import client from '../config/discordClient';
 
 const getTextChannelIdFromName = (channelName: string): string | undefined => {
   const channels = client.channels.cache;
