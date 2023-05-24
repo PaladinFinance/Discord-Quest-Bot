@@ -1,8 +1,14 @@
 import { TwitterApi } from 'twitter-api-v2';
 
-const token = process.env.TWITTER_TOKEN;
-const twitterClient = new TwitterApi(token);
+if (!process.env.TWITTER_API_KEY || !process.env.TWITTER_API_SECRET || !process.env.TWITTER_ACCESS_TOKEN || !process.env.TWITTER_ACCESS_SECRET) {
+  throw new Error('No twitter secrets available');
+}
 
-const readOnlyClient = twitterClient.readOnly;
+const twitterClient = new TwitterApi({
+  appKey: process.env.TWITTER_API_KEY,
+  appSecret: process.env.TWITTER_API_SECRET,
+  accessToken: process.env.TWITTER_ACCESS_TOKEN,
+  accessSecret: process.env.TWITTER_ACCESS_SECRET,
+});
 
-export default readOnlyClient;
+export default twitterClient;

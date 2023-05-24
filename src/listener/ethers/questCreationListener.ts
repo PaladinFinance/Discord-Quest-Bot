@@ -1,10 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Listener } from '@ethersproject/abstract-provider';
-import fs from 'fs';
-import client from '../../config/discordClient';
+import discordClient from '../../config/discordClient';
+import twitterClient from '../../config/twitterClient';
 import { ChannelType } from 'discord.js';
 import { getProtocolEmbed, ProtocolType } from '../../scripts/getProtocolEmbed';
 import { BigNumber } from 'ethers';
+import getTweet from 'src/scripts/getTweet';
+import data from '../../data/data.json';
 
 const questCreationListener =
   (protocolType: ProtocolType): Listener =>
@@ -19,12 +21,16 @@ const questCreationListener =
     rewardPerVote: BigNumber,
   ) => {
     try {
-      const data = JSON.parse(
-        fs.readFileSync('./src/data/data.json', {
-          encoding: 'utf8',
-          flag: 'r',
-        }),
+      const tweet = await getTweet(
+        gauge,
+        rewardToken,
+        objectiveVotes,
+        rewardPerVote,
+        startPeriod,
+        protocolType,
       );
+
+      await twitterClient.v2.tweet(tweet);
 
       const embed = await getProtocolEmbed(
         gauge,
@@ -42,7 +48,7 @@ const questCreationListener =
           : data.balancerTargetChannelIds;
 
       channels.forEach(async (channelId: string) => {
-        const channel = client.channels.cache.get(channelId);
+        const channel = discordClient.channels.cache.get(channelId);
         if (
           channel &&
           (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildNews)
