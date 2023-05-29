@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ProtocolType } from './getProtocolEmbed';
+import { ProtocolType } from '../listener/ethers/questCreationListener';
 import { getAddress } from 'ethers/lib/utils';
 
 const getBalancerSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
