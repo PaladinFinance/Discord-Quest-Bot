@@ -56,7 +56,7 @@ const getTweet = async (
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const rewardPerVoteFormatted = formatRewardPerVote(rewardPerVote);
 
-  let result = `The ${gaugeSymbol} is requesting ${objectiveVotesFormatted} $${protocolName} and pay ${totalRewardTokenFormatted} $${rewardTokenSymbol} - ${rewardPerVoteFormatted} $${rewardTokenSymbol} / $${protocolName} `;
+  let result = `New Quest for: ${gaugeSymbol} gauge!\n${totalRewardTokenFormatted} $${rewardTokenSymbol} is available for ${objectiveVotesFormatted} $${protocolName} at ${rewardPerVoteFormatted} $${rewardTokenSymbol} / $${protocolName}.`;
   return result;
 };
 
