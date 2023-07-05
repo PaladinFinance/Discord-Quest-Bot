@@ -8,7 +8,7 @@ const getTotalRewardToken = (
   try {
     return objectiveVotes
       * rewardPerVote
-      / (10n * rewardDecimals)
+      / (10n ** rewardDecimals)
       / WeiPerEther;
   } catch (err) {
     console.error(err);
