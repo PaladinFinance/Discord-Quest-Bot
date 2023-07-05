@@ -3,7 +3,7 @@ import QuestBoardAbi from './data/abi/QuestBoardAbi.json';
 import questCreationListener from './listener/ethers/questCreationListener';
 import data from './data/data.json';
 import cron from 'node-cron';
-import { ProtocolType } from './scripts/getProtocolEmbed';
+import { ProtocolType } from './listener/ethers/questCreationListener';
 import setStatusForAvailableQuests from './scripts/setStatusForAvailableQuests';
 
 createEtherEventListener(

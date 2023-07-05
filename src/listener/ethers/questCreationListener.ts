@@ -157,7 +157,7 @@ const questCreationListener =
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-      await postDiscordMessage(
+      await Promise.all([postDiscordMessage(
         protocolType,
         embedColor,
         protocolName,
@@ -168,16 +168,14 @@ const questCreationListener =
         totalRewardTokenFormatted,
         rewardTokenSymbol,
         totalPriceFormatted,
-      );
-
-      await postTweet(
+      ), postTweet(
         gaugeSymbol,
         totalRewardTokenFormatted,
         rewardTokenSymbol,
         objectiveVotesFormatted,
         rewardPerVoteFormatted,
         protocolName,
-      );
+      )]);
 
       console.log(`New ${protocolType} quest created.`);
     } catch (err) {
