@@ -1,5 +1,4 @@
 import { APIEmbed } from 'discord.js';
-import { BigNumber } from 'ethers';
 
 export const getProtocolEmbed = async (
   embedColor: number,
@@ -7,7 +6,7 @@ export const getProtocolEmbed = async (
   gaugeSymbol: string,
   startPeriodFormatted: string,
   protocolURI: string,
-  duration: BigNumber,
+  duration: bigint,
   totalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
   totalPriceFormatted: string,

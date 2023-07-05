@@ -1,1 +1,1 @@
-export const WEEK = 7 * 24 * 60 * 60;
+export const WEEK: bigint = BigInt(7 * 24 * 60 * 60);

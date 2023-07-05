@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Listener } from '@ethersproject/abstract-provider';
 import discordClient from '../../config/discordClient';
 import twitterClient from '../../config/twitterClient';
 import { ChannelType } from 'discord.js';
 import { getProtocolEmbed } from '../../scripts/getProtocolEmbed';
-import { BigNumber } from 'ethers';
+import { Listener } from 'ethers';
 import getTweet from '../../scripts/getTweet';
 import data from '../../data/data.json';
 import getSymbolFromGauge from '../../scripts/getSymbolFromGauge';
@@ -26,7 +25,7 @@ const postDiscordMessage = async (
   gaugeSymbol: string,
   startPeriodFormatted: string,
   protocolURI: string,
-  duration: BigNumber,
+  duration: bigint,
   totalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
   totalPriceFormatted: string,
@@ -89,7 +88,7 @@ const postTweet = async (
   }
 };
 
-const formatRewardPerVote = (rewardPerVote: BigNumber): string => {
+const formatRewardPerVote = (rewardPerVote: bigint): string => {
   const rewardPerVoteString = rewardPerVote.toString();
 
   let indexBefore0s = 0;
@@ -121,14 +120,14 @@ const formatRewardPerVote = (rewardPerVote: BigNumber): string => {
 const questCreationListener =
   (protocolType: ProtocolType): Listener =>
   async (
-    questID: BigNumber,
+    questID: bigint,
     creator: string,
     gauge: string,
     rewardToken: string,
-    duration: BigNumber,
-    startPeriod: BigNumber,
-    objectiveVotes: BigNumber,
-    rewardPerVote: BigNumber,
+    duration: bigint,
+    startPeriod: bigint,
+    objectiveVotes: bigint,
+    rewardPerVote: bigint,
   ) => {
     console.log(`Quest ${questID} created by ${creator} on ${protocolType}`);
     try {
@@ -144,15 +143,14 @@ const questCreationListener =
       const totalRewardTokenFormatted = totalRewardToken
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      const objectiveVotesFormatted = objectiveVotes
-        .div(BigNumber.from(10).pow(18))
+      const objectiveVotesFormatted = (objectiveVotes / (10n**18n))
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
       const rewardPerVoteFormatted = formatRewardPerVote(rewardPerVote);
       const protocolURI = protocolType === ProtocolType.Curve ? 'protocol=crv' : 'protocol=bal';
       const embedColor = protocolType === ProtocolType.Curve ? 0xfffff : 0x00000;
-      const startPeriodFormatted = moment.unix(startPeriod.toNumber()).format('D MMMM YYYY');
+      const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
       const totalPriceFormatted = totalPrice
         .toFixed(2)
         .toString()
