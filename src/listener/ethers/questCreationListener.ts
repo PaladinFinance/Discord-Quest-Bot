@@ -130,6 +130,7 @@ const questCreationListener =
     objectiveVotes: BigNumber,
     rewardPerVote: BigNumber,
   ) => {
+    console.log(`Quest ${questID} created by ${creator} on ${protocolType}`);
     try {
       const gaugeSymbol = await getSymbolFromGauge(gauge, protocolType);
       const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
@@ -176,8 +177,6 @@ const questCreationListener =
         rewardPerVoteFormatted,
         protocolName,
       )]);
-
-      console.log(`New ${protocolType} quest created.`);
     } catch (err) {
       console.error(err);
     }
