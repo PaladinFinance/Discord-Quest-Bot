@@ -143,7 +143,7 @@ const questCreationListener =
       const totalRewardTokenFormatted = totalRewardToken
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      const objectiveVotesFormatted = (objectiveVotes / (10n**18n))
+      const objectiveVotesFormatted = (objectiveVotes / 10n ** 18n)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
@@ -156,25 +156,28 @@ const questCreationListener =
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-      await Promise.all([postDiscordMessage(
-        protocolType,
-        embedColor,
-        protocolName,
-        gaugeSymbol,
-        startPeriodFormatted,
-        protocolURI,
-        duration,
-        totalRewardTokenFormatted,
-        rewardTokenSymbol,
-        totalPriceFormatted,
-      ), postTweet(
-        gaugeSymbol,
-        totalRewardTokenFormatted,
-        rewardTokenSymbol,
-        objectiveVotesFormatted,
-        rewardPerVoteFormatted,
-        protocolName,
-      )]);
+      await Promise.all([
+        postDiscordMessage(
+          protocolType,
+          embedColor,
+          protocolName,
+          gaugeSymbol,
+          startPeriodFormatted,
+          protocolURI,
+          duration,
+          totalRewardTokenFormatted,
+          rewardTokenSymbol,
+          totalPriceFormatted,
+        ),
+        postTweet(
+          gaugeSymbol,
+          totalRewardTokenFormatted,
+          rewardTokenSymbol,
+          objectiveVotesFormatted,
+          rewardPerVoteFormatted,
+          protocolName,
+        ),
+      ]);
     } catch (err) {
       console.error(err);
     }

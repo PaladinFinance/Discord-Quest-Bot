@@ -6,10 +6,7 @@ const getTotalRewardToken = (
   rewardDecimals: bigint,
 ): bigint => {
   try {
-    return objectiveVotes
-      * rewardPerVote
-      / (10n ** rewardDecimals)
-      / WeiPerEther;
+    return (objectiveVotes * rewardPerVote) / 10n ** rewardDecimals / WeiPerEther;
   } catch (err) {
     console.error(err);
     return BigInt(0);
