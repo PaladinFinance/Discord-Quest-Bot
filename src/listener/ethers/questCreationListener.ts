@@ -157,18 +157,14 @@ const questCreationListener =
         rewardTokenDecimals,
       );
       const protocolName = getProtocolName(protocolType);
-      const totalRewardTokenFormatted = totalRewardToken
-        .toLocaleString();
-      const objectiveVotesFormatted = (objectiveVotes / 10n ** 18n)
-        .toLocaleString();
+      const totalRewardTokenFormatted = totalRewardToken.toLocaleString();
+      const objectiveVotesFormatted = (objectiveVotes / 10n ** 18n).toLocaleString();
       const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
       const rewardPerVoteFormatted = formatRewardPerVote(rewardPerVote);
       const protocolURI = getProtocolURI(protocolType);
       const embedColor = getEmbedColor(protocolType);
       const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
-      const totalPriceFormatted = totalPrice
-        .toFixed(2)
-        .toLocaleString();
+      const totalPriceFormatted = totalPrice.toFixed(2).toLocaleString();
 
       await Promise.all([
         postDiscordMessage(

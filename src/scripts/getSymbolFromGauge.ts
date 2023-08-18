@@ -9,8 +9,9 @@ import provider from '../config/etherProvider';
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   try {
     const res = await axios.post('https://api-v3.balancer.fi/', {
-      query: "query VeBalGetVotingList {\n  veBalGetVotingList {\n    symbol\n    gauge {\n      address\n    }\n  }\n}",
-      operationName: "VeBalGetVotingList"
+      query:
+        'query VeBalGetVotingList {\n  veBalGetVotingList {\n    symbol\n    gauge {\n      address\n    }\n  }\n}',
+      operationName: 'VeBalGetVotingList',
     });
 
     for (const currentGauge of res.data.data.veBalGetVotingList) {
@@ -62,7 +63,7 @@ const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> =
   return '';
 };
 
-const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {  
+const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
   switch (protocol) {
     case ProtocolType.Balancer:
       return getSymbolFromBalancerGauge(gauge);

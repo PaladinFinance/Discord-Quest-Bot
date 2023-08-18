@@ -1,5 +1,4 @@
 import axios from 'axios';
-import bigintToDecimalString from './bigintToDecimalString';
 
 const getLlamaPrice = async (tokenAddress: string): Promise<number> => {
   const res = await axios.get(`https://coins.llama.fi/prices/current/ethereum:${tokenAddress}`);
