@@ -18,6 +18,12 @@ createEtherEventListener(
   'NewQuest',
   questCreationListener(ProtocolType.Curve),
 );
+createEtherEventListener(
+  data.veLITQuestBoardContractAddresses,
+  QuestBoardAbi,
+  'NewQuest',
+  questCreationListener(ProtocolType.Bunni),
+);
 
 cron.schedule('0 0 * * 4', () => {
   setStatusForAvailableQuests();

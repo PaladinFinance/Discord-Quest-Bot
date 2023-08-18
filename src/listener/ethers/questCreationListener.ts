@@ -12,11 +12,26 @@ import getDecimalsFromToken from '../../scripts/getDecimalsFromToken';
 import getTotalRewardToken from '../../scripts/getTotalRewardToken';
 import moment from 'moment';
 import getTotalPricePerToken from '../../scripts/getTotalPricePerToken';
+import formatRewardPerVote from '../../scripts/formatRewardPerVote';
 
 export enum ProtocolType {
   Curve,
   Balancer,
+  Bunni,
 }
+
+const getChannels = (protocol: ProtocolType): string[] => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return data.balancerTargetChannelIds;
+    case ProtocolType.Bunni:
+      return data.bunniTargetChannelIds;
+    case ProtocolType.Curve:
+      return data.curveTargetChannelIds;
+    default:
+      return [];
+  }
+};
 
 const postDiscordMessage = async (
   protocolType: ProtocolType,
@@ -43,16 +58,13 @@ const postDiscordMessage = async (
       totalPriceFormatted,
     );
 
-    const channels =
-      protocolType === ProtocolType.Curve
-        ? data.curveTargetChannelIds
-        : data.balancerTargetChannelIds;
+    const channels = getChannels(protocolType);
 
     channels.forEach(async (channelId: string) => {
       const channel = discordClient.channels.cache.get(channelId);
       if (
         channel &&
-        (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildNews)
+        (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildAnnouncement)
       ) {
         await channel.send({ embeds: [embed] });
       } else {
@@ -73,7 +85,7 @@ const postTweet = async (
   protocolName: string,
 ): Promise<void> => {
   try {
-    const tweet = await getTweet(
+    const tweet = getTweet(
       gaugeSymbol,
       totalRewardTokenFormatted,
       rewardTokenSymbol,
@@ -88,33 +100,43 @@ const postTweet = async (
   }
 };
 
-const formatRewardPerVote = (rewardPerVote: bigint): string => {
-  const rewardPerVoteString = rewardPerVote.toString();
-
-  let indexBefore0s = 0;
-  for (let i = rewardPerVoteString.length - 1; i >= 0; i--) {
-    if (rewardPerVoteString[i] !== '0') {
-      indexBefore0s = i + 1;
-      break;
-    }
+const getProtocolName = (protocol: ProtocolType): string => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return 'veBAL';
+    case ProtocolType.Curve:
+      return 'veCRV';
+    case ProtocolType.Bunni:
+      return 'veLIT';
+    default:
+      return '';
   }
-  let rewardPerVoteFormatted =
-    18 - rewardPerVoteString.length < 0
-      ? rewardPerVoteString.substring(0, indexBefore0s) +
-        '0'.repeat(rewardPerVoteString.length - 18)
-      : '0'.repeat(18 - rewardPerVoteString.length) +
-        rewardPerVoteString.substring(0, indexBefore0s);
+};
 
-  const indexToInsertDot =
-    rewardPerVoteString.length - 18 < 0 ? 0 : rewardPerVoteString.length - 18;
-  rewardPerVoteFormatted =
-    rewardPerVoteFormatted.slice(0, indexToInsertDot) +
-    '.' +
-    rewardPerVoteFormatted.slice(indexToInsertDot);
-  if (rewardPerVoteString.length - 18 <= 0) {
-    rewardPerVoteFormatted = '0' + rewardPerVoteFormatted;
+const getProtocolURI = (protocol: ProtocolType): string => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return 'protocol=bal';
+    case ProtocolType.Curve:
+      return 'protocol=crv';
+    case ProtocolType.Bunni:
+      return 'protocol=lit';
+    default:
+      return '';
   }
-  return rewardPerVoteFormatted;
+};
+
+const getEmbedColor = (protocol: ProtocolType): number => {
+  switch (protocol) {
+    case ProtocolType.Balancer:
+      return 0x00000;
+    case ProtocolType.Curve:
+      return 0xfffff;
+    case ProtocolType.Bunni:
+      return 0x800080;
+    default:
+      return 0x00000;
+  }
 };
 
 const questCreationListener =
@@ -139,7 +161,7 @@ const questCreationListener =
         rewardPerVote,
         rewardTokenDecimals,
       );
-      const protocolName = protocolType === ProtocolType.Curve ? 'veCRV' : 'veBAL';
+      const protocolName = getProtocolName(protocolType);
       const totalRewardTokenFormatted = totalRewardToken
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -148,8 +170,8 @@ const questCreationListener =
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
       const rewardPerVoteFormatted = formatRewardPerVote(rewardPerVote);
-      const protocolURI = protocolType === ProtocolType.Curve ? 'protocol=crv' : 'protocol=bal';
-      const embedColor = protocolType === ProtocolType.Curve ? 0xfffff : 0x00000;
+      const protocolURI = getProtocolURI(protocolType);
+      const embedColor = getEmbedColor(protocolType);
       const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
       const totalPriceFormatted = totalPrice
         .toFixed(2)

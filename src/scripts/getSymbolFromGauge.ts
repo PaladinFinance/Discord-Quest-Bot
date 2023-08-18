@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { ProtocolType } from '../listener/ethers/questCreationListener';
 import { getAddress } from 'ethers';
+import ERC20 from '../data/abi/ERC20.json';
+import BunniGauge from '../data/abi/BunniGauge.json';
+import { Contract } from 'ethers';
+import provider from '../config/etherProvider';
 
 const getBalancerSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
   let res;
@@ -131,12 +135,37 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
   return '';
 };
 
+const getLpTokenAddressFromBunniGauge = async (gauge: string): Promise<string> => {
+  const gaugeContract = new Contract(gauge, BunniGauge, provider);
+  const lpAddress = await gaugeContract.lp_token();
+  return lpAddress;
+};
+
+const getNameFromLpToken = async (lpToken: string): Promise<string> => {
+  const lpTokenContract = new Contract(lpToken, ERC20, provider);
+  const name = await lpTokenContract.name();
+  return name;
+};
+
+const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> => {
+  try {
+    const lpAddress = await getLpTokenAddressFromBunniGauge(expectedGauge);
+    const name = await getNameFromLpToken(lpAddress);
+    return name.replace('Bunni ', '').replace(' LP', '');
+  } catch (err) {
+    console.error(err);
+  }
+  return '';
+};
+
 const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
   switch (protocol) {
     case ProtocolType.Balancer:
       return getSymbolFromBalancerGauge(gauge);
     case ProtocolType.Curve:
       return getSymbolFromCurveGauge(gauge);
+    case ProtocolType.Bunni:
+      return getSymbolFromBunniGauge(gauge);
     default:
       return '';
   }
