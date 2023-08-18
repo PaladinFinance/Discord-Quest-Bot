@@ -1,0 +1,5 @@
+export enum ProtocolType {
+    Curve,
+    Balancer,
+    Bunni,
+}

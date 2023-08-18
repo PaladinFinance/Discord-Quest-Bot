@@ -13,12 +13,7 @@ import getTotalRewardToken from '../../scripts/getTotalRewardToken';
 import moment from 'moment';
 import getTotalPricePerToken from '../../scripts/getTotalPricePerToken';
 import formatRewardPerVote from '../../scripts/formatRewardPerVote';
-
-export enum ProtocolType {
-  Curve,
-  Balancer,
-  Bunni,
-}
+import { ProtocolType } from '../../type/protocolType';
 
 const getChannels = (protocol: ProtocolType): string[] => {
   switch (protocol) {
@@ -46,7 +41,7 @@ const postDiscordMessage = async (
   totalPriceFormatted: string,
 ): Promise<void> => {
   try {
-    const embed = await getProtocolEmbed(
+    const embed = getProtocolEmbed(
       embedColor,
       protocolName,
       gaugeSymbol,
@@ -163,11 +158,9 @@ const questCreationListener =
       );
       const protocolName = getProtocolName(protocolType);
       const totalRewardTokenFormatted = totalRewardToken
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        .toLocaleString();
       const objectiveVotesFormatted = (objectiveVotes / 10n ** 18n)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        .toLocaleString();
       const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
       const rewardPerVoteFormatted = formatRewardPerVote(rewardPerVote);
       const protocolURI = getProtocolURI(protocolType);
@@ -175,8 +168,7 @@ const questCreationListener =
       const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
       const totalPriceFormatted = totalPrice
         .toFixed(2)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        .toLocaleString();
 
       await Promise.all([
         postDiscordMessage(

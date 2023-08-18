@@ -1,6 +1,6 @@
 import { APIEmbed } from 'discord.js';
 
-export const getProtocolEmbed = async (
+export const getProtocolEmbed = (
   embedColor: number,
   protocolName: string,
   gaugeSymbol: string,
@@ -10,7 +10,7 @@ export const getProtocolEmbed = async (
   totalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
   totalPriceFormatted: string,
-): Promise<APIEmbed> => {
+): APIEmbed => {
   const exampleEmbed: APIEmbed = {
     color: embedColor,
     title: `New ${protocolName} Quest: ${gaugeSymbol}`,

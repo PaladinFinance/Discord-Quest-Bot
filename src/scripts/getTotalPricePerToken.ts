@@ -1,4 +1,5 @@
 import axios from 'axios';
+import bigintToDecimalString from './bigintToDecimalString';
 
 const getLlamaPrice = async (tokenAddress: string): Promise<number> => {
   const res = await axios.get(`https://coins.llama.fi/prices/current/ethereum:${tokenAddress}`);
@@ -13,14 +14,14 @@ const getCoingeckoPrice = async (tokenAddress: string): Promise<number> => {
 };
 
 const getTotalPricePerToken = async (
-  tokenAmount: bigint,
+  tokenAmount: number,
   tokenAddress: string,
 ): Promise<number> => {
   tokenAddress = tokenAddress.toLowerCase();
   const tokenPrice = await getLlamaPrice(tokenAddress).catch(() =>
     getCoingeckoPrice(tokenAddress).catch(() => 0),
   );
-  return tokenPrice * Number(tokenAmount);
+  return tokenPrice * tokenAmount;
 };
 
 export default getTotalPricePerToken;
