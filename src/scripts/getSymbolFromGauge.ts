@@ -1,10 +1,6 @@
 import axios from 'axios';
 import { ProtocolType } from '../type/protocolType';
 import { getAddress } from 'ethers';
-import ERC20 from '../data/abi/ERC20.json';
-import BunniGauge from '../data/abi/BunniGauge.json';
-import { Contract } from 'ethers';
-import provider from '../config/etherProvider';
 
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   try {
@@ -30,7 +26,7 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
     const res = await axios.get('https://api.curve.fi/api/getAllGauges');
 
     for (const gauge in res.data.data) {
-      if (getAddress(res.data.data[gauge].gauge) === expectedGauge) {
+      if (getAddress(res.data.data[gauge].gauge) === getAddress(expectedGauge)) {
         return res.data.data[gauge].shortName.split(' ')[0];
       }
     }
@@ -40,25 +36,41 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
   return '';
 };
 
-const getLpTokenAddressFromBunniGauge = async (gauge: string): Promise<string> => {
-  const gaugeContract = new Contract(gauge, BunniGauge, provider);
-  const lpAddress = await gaugeContract.lp_token();
-  return lpAddress;
-};
+const getBunniChainGauges = async (
+  chain: string,
+): Promise<{ address: string; symbol: string }[]> => {
+  try {
+    const res = await axios.post(
+      `https://api.thegraph.com/subgraphs/name/bunniapp/bunni-${chain}`,
+      {
+        query:
+          '{\n  bunniTokens(\n    where: {gauge_: {address_not: "0x0000000000000000000000000000000000000000"}}\n  ) {\n    gauge {\n      address\n    }\n    name\n  }\n}',
+      },
+    );
+    const gauges: { address: string; symbol: string }[] = res.data.data.bunniTokens.map(
+      (gauge: any) => ({
+        address: gauge.gauge.address,
+        symbol: gauge.name,
+      }),
+    );
 
-const getNameFromLpToken = async (lpToken: string): Promise<string> => {
-  const lpTokenContract = new Contract(lpToken, ERC20, provider);
-  const name = await lpTokenContract.name();
-  return name;
+    return gauges;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
 };
 
 const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> => {
-  try {
-    const lpAddress = await getLpTokenAddressFromBunniGauge(expectedGauge);
-    const name = await getNameFromLpToken(lpAddress);
-    return name.replace('Bunni ', '').replace(' LP', '');
-  } catch (err) {
-    console.error(err);
+  const chains = ['mainnet', 'arbitrum'];
+
+  for (const chain of chains) {
+    const gauges = await getBunniChainGauges(chain);
+    for (const gauge of gauges) {
+      if (getAddress(gauge.address) === getAddress(expectedGauge)) {
+        return gauge.symbol.replace('Bunni ', '').replace(' LP', '');
+      }
+    }
   }
   return '';
 };
