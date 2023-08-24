@@ -4,7 +4,7 @@ import provider from '../config/etherProvider';
 import QuestBoardAbi from '../data/abi/QuestBoardAbi.json';
 
 const getAvailableQuestsForPeriod = async (addresses: string[]): Promise<BigInt> => {
-  let amount: BigInt = 0n;
+  let amount = 0n;
 
   await Promise.all(
     addresses.map(async (address) => {
@@ -13,7 +13,7 @@ const getAvailableQuestsForPeriod = async (addresses: string[]): Promise<BigInt>
         const availableQuestsNb = await contract.getQuestIdsForPeriod(
           (BigInt(Date.now()) / 1000n / WEEK) * WEEK,
         );
-        amount = amount + availableQuestsNb.length;
+        amount = amount + BigInt(availableQuestsNb.length);
       } catch (err) {
         console.error(err);
       }
