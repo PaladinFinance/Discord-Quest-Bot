@@ -40,6 +40,7 @@ const postDiscordMessage = async (
   rewardTokenSymbol: string,
   totalPriceFormatted: string,
 ): Promise<void> => {
+  if (!discordClient) return;
   try {
     const embed = getProtocolEmbed(
       embedColor,
@@ -56,7 +57,7 @@ const postDiscordMessage = async (
     const channels = getChannels(protocolType);
 
     channels.forEach(async (channelId: string) => {
-      const channel = discordClient.channels.cache.get(channelId);
+      const channel = discordClient!.channels.cache.get(channelId);
       if (
         channel &&
         (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildAnnouncement)
@@ -79,6 +80,7 @@ const postTweet = async (
   rewardPerVoteFormatted: string,
   protocolName: string,
 ): Promise<void> => {
+  if (!twitterClient) return;
   try {
     const tweet = getTweet(
       gaugeSymbol,
