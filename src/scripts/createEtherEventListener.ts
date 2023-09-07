@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { Listener } from '@ethersproject/abstract-provider';
-import { Contract } from 'ethers';
+import { Contract, Listener } from 'ethers';
 import provider from '../config/etherProvider';
 
 const createEtherEventListener = (

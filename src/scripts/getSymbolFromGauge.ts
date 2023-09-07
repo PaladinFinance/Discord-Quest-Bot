@@ -1,118 +1,23 @@
 import axios from 'axios';
-import { ProtocolType } from './getProtocolEmbed';
-import { getAddress } from 'ethers/lib/utils';
-
-const getBalancerSymbol = async (recipient: string, chain: string): Promise<string | undefined> => {
-  let res;
-  try {
-    res = await axios.post(
-      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-${chain.toLowerCase()}`,
-      {
-        query: `{
-          liquidityGauges(where: {streamer: "${recipient}"}) {
-            symbol,
-          }
-        }`,
-      },
-    );
-  } catch (e) {
-    console.error(e);
-    return;
-  }
-  if (
-    !res.data ||
-    !res.data.data ||
-    !res.data.data.liquidityGauges ||
-    res.data.data.liquidityGauges === 0
-  )
-    return;
-  return res.data.data.liquidityGauges[0].symbol;
-};
-
-const determineBalancerChain = async (gauge: string): Promise<string | undefined> => {
-  let res;
-  try {
-    res = await axios.post(
-      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
-      {
-        query: `{
-          rootGauge(id: "${gauge.toLowerCase()}") {
-            chain
-          }
-        }`,
-      },
-    );
-  } catch (e) {
-    console.error(e);
-    return;
-  }
-  if (!res.data || !res.data.data || !res.data.data.rootGauge) return;
-  return res.data.data.rootGauge.chain;
-};
-
-const getSymbolFromBalancerLiquidityGauge = async (gauge: string): Promise<string | undefined> => {
-  let res;
-  try {
-    res = await axios.post(
-      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
-      {
-        query: `{
-          liquidityGauge(id: "${gauge.toLowerCase()}") {
-            symbol
-          }
-        }`,
-      },
-    );
-  } catch (e) {
-    console.error(e);
-    return;
-  }
-  if (!res.data || !res.data.data || !res.data.data.liquidityGauge) return;
-  return res.data.data.liquidityGauge.symbol;
-};
-
-const getBalancerRecipient = async (gauge: string) => {
-  let res;
-  try {
-    res = await axios.post(
-      `https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges`,
-      {
-        query: `{
-          rootGauge(id: "${gauge.toLowerCase()}") {
-            recipient
-          }
-        }`,
-      },
-    );
-  } catch (e) {
-    console.error(e);
-    return;
-  }
-  if (!res.data || !res.data.data || !res.data.data.rootGauge) return;
-  return res.data.data.rootGauge.recipient;
-};
-
-const getSymbolFromBalancerRootGauge = async (gauge: string): Promise<string | undefined> => {
-  // Get the pool address
-  const recipient = await getBalancerRecipient(gauge);
-  if (!recipient) return;
-
-  // Determine the chain
-  const chain = await determineBalancerChain(gauge);
-  if (!chain) return;
-
-  // Get the pool address
-  const symbol = await getBalancerSymbol(recipient, chain);
-  return symbol;
-};
+import { ProtocolType } from '../type/protocolType';
+import { getAddress } from 'ethers';
 
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
-  const mainetSymbol = await getSymbolFromBalancerLiquidityGauge(gauge);
-  if (mainetSymbol) return mainetSymbol;
+  try {
+    const res = await axios.post('https://api-v3.balancer.fi/', {
+      query:
+        'query VeBalGetVotingList {\n  veBalGetVotingList {\n    symbol\n    gauge {\n      address\n    }\n  }\n}',
+      operationName: 'VeBalGetVotingList',
+    });
 
-  const altSymbol = await getSymbolFromBalancerRootGauge(gauge);
-  if (altSymbol) return altSymbol;
-
+    for (const currentGauge of res.data.data.veBalGetVotingList) {
+      if (getAddress(gauge) === getAddress(currentGauge.gauge.address)) {
+        return currentGauge.symbol;
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
   return '';
 };
 
@@ -121,12 +26,51 @@ const getSymbolFromCurveGauge = async (expectedGauge: string): Promise<string> =
     const res = await axios.get('https://api.curve.fi/api/getAllGauges');
 
     for (const gauge in res.data.data) {
-      if (getAddress(res.data.data[gauge].gauge) === expectedGauge) {
+      if (getAddress(res.data.data[gauge].gauge) === getAddress(expectedGauge)) {
         return res.data.data[gauge].shortName.split(' ')[0];
       }
     }
   } catch (err) {
     console.error(err);
+  }
+  return '';
+};
+
+const getBunniChainGauges = async (
+  chain: string,
+): Promise<{ address: string; symbol: string }[]> => {
+  try {
+    const res = await axios.post(
+      `https://api.thegraph.com/subgraphs/name/bunniapp/bunni-${chain}`,
+      {
+        query:
+          '{\n  bunniTokens(\n    where: {gauge_: {address_not: "0x0000000000000000000000000000000000000000"}}\n  ) {\n    gauge {\n      address\n    }\n    name\n  }\n}',
+      },
+    );
+    const gauges: { address: string; symbol: string }[] = res.data.data.bunniTokens.map(
+      (gauge: any) => ({
+        address: gauge.gauge.address,
+        symbol: gauge.name,
+      }),
+    );
+
+    return gauges;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+};
+
+const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> => {
+  const chains = ['mainnet', 'arbitrum'];
+
+  for (const chain of chains) {
+    const gauges = await getBunniChainGauges(chain);
+    for (const gauge of gauges) {
+      if (getAddress(gauge.address) === getAddress(expectedGauge)) {
+        return gauge.symbol.replace('Bunni ', '').replace(' LP', '');
+      }
+    }
   }
   return '';
 };
@@ -137,6 +81,8 @@ const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promis
       return getSymbolFromBalancerGauge(gauge);
     case ProtocolType.Curve:
       return getSymbolFromCurveGauge(gauge);
+    case ProtocolType.Bunni:
+      return getSymbolFromBunniGauge(gauge);
     default:
       return '';
   }
