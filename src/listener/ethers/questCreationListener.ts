@@ -14,8 +14,8 @@ import moment from 'moment';
 import getTotalPricePerToken from '../../scripts/getTotalPricePerToken';
 import formatRewardPerVote from '../../scripts/formatRewardPerVote';
 import { ProtocolType } from '../../type/protocolType';
-import getQuestPeriod from 'src/scripts/getQuestPeriods';
-import { QuestType } from 'src/type/questType';
+import getQuestPeriod from '../../scripts/getQuestPeriods';
+import { QuestType } from '../../type/questType';
 
 const getChannels = (protocol: ProtocolType): string[] => {
   switch (protocol) {

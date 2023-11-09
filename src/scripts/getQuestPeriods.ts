@@ -30,7 +30,7 @@ type QuestPeriod = {
 
 const getQuestPeriod = async (questBoard: string, questId: bigint): Promise<QuestPeriod[]> => {
   const contract = new Contract(questBoard, QuestBoardAbi, provider);
-  const periods = await contract.getAllQuestsPeriodsForQuestId(questId);
+  const periods = await contract.getAllQuestPeriodsForQuestId(questId);
   return periods;
 };
 

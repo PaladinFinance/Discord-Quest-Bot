@@ -1,4 +1,4 @@
-import { QuestType } from 'src/type/questType';
+import { QuestType } from '../type/questType';
 
 const getTweet = (
   gaugeSymbol: string,

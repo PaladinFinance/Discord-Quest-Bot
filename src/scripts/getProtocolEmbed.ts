@@ -1,5 +1,5 @@
 import { APIEmbed } from 'discord.js';
-import { QuestType } from 'src/type/questType';
+import { QuestType } from '../type/questType';
 
 export const getProtocolEmbed = (
   embedColor: number,
