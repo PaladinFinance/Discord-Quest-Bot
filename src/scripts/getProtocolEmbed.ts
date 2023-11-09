@@ -24,12 +24,18 @@ export const getProtocolEmbed = (
     fields: [
       {
         name: ':coin: Amount',
-        value: questType == QuestType.Fixe ? `${minTotalRewardTokenFormatted} ${rewardTokenSymbol}` : `${minTotalRewardTokenFormatted} - ${maxTotalRewardTokenFormatted} ${rewardTokenSymbol}`,
+        value:
+          questType == QuestType.Fixe
+            ? `${minTotalRewardTokenFormatted} ${rewardTokenSymbol}`
+            : `${minTotalRewardTokenFormatted} - ${maxTotalRewardTokenFormatted} ${rewardTokenSymbol}`,
         inline: true,
       },
       {
         name: ':moneybag: USD Value',
-        value: questType == QuestType.Fixe ? `$${minTotalPriceFormatted}` : `$${minTotalPriceFormatted} - $${maxTotalPriceFormatted}`,
+        value:
+          questType == QuestType.Fixe
+            ? `$${minTotalPriceFormatted}`
+            : `$${minTotalPriceFormatted} - $${maxTotalPriceFormatted}`,
         inline: true,
       },
       {

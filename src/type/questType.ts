@@ -1,4 +1,4 @@
 export enum QuestType {
-    Range,
-    Fixe
+  Range,
+  Fixe,
 }

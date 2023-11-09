@@ -1,32 +1,37 @@
-import { BigNumberish, Contract } from "ethers";
+import { Contract } from 'ethers';
 import provider from '../config/etherProvider';
 import QuestBoardAbi from '../data/abi/QuestBoardAbi.json';
 
-enum PeriodState { ZERO, ACTIVE, CLOSED, DISTRIBUTED }
+enum PeriodState {
+  ZERO,
+  ACTIVE,
+  CLOSED,
+  DISTRIBUTED,
+}
 
 type QuestPeriod = {
-    // Total reward amount that can be distributed for that period
-    rewardAmountPerPeriod: bigint
-    // Min Amount of reward for each vote (for 1 veToken)
-    minRewardPerVote: bigint
-    // Max Amount of reward for each vote (for 1 veToken)
-    maxRewardPerVote: bigint
-    // Min Target Bias for the Gauge
-    minObjectiveVotes: bigint
-    // Max Target Bias for the Gauge
-    maxObjectiveVotes: bigint
-    // Amount of reward to distribute, at period closing
-    rewardAmountDistributed: bigint
-    // Timestamp of the Period start
-    periodStart: bigint
-    // Current state of the Period
-    currentState: PeriodState
-}
+  // Total reward amount that can be distributed for that period
+  rewardAmountPerPeriod: bigint;
+  // Min Amount of reward for each vote (for 1 veToken)
+  minRewardPerVote: bigint;
+  // Max Amount of reward for each vote (for 1 veToken)
+  maxRewardPerVote: bigint;
+  // Min Target Bias for the Gauge
+  minObjectiveVotes: bigint;
+  // Max Target Bias for the Gauge
+  maxObjectiveVotes: bigint;
+  // Amount of reward to distribute, at period closing
+  rewardAmountDistributed: bigint;
+  // Timestamp of the Period start
+  periodStart: bigint;
+  // Current state of the Period
+  currentState: PeriodState;
+};
 
 const getQuestPeriod = async (questBoard: string, questId: bigint): Promise<QuestPeriod[]> => {
-    const contract = new Contract(questBoard, QuestBoardAbi, provider);
-    const periods = await contract.getAllQuestsPeriodsForQuestId(questId);
-    return periods;
-}
+  const contract = new Contract(questBoard, QuestBoardAbi, provider);
+  const periods = await contract.getAllQuestsPeriodsForQuestId(questId);
+  return periods;
+};
 
 export default getQuestPeriod;

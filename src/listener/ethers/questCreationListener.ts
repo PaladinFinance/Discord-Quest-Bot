@@ -152,7 +152,7 @@ const getQuestTypeName = (questType: QuestType): string => {
     default:
       return '';
   }
-}
+};
 
 const getEmbedColor = (protocol: ProtocolType): number => {
   switch (protocol) {
@@ -182,7 +182,7 @@ const questCreationListener =
       const periods = await getQuestPeriod(questBoardAddress, questID);
       const latestPeriod = periods[periods.length - 1];
 
-      const maxObjectiveVotes =  latestPeriod.maxObjectiveVotes;
+      const maxObjectiveVotes = latestPeriod.maxObjectiveVotes;
       const maxRewardPerVote = latestPeriod.maxRewardPerVote;
       const minObjectiveVotes = latestPeriod.minObjectiveVotes;
       const minRewardPerVote = latestPeriod.minRewardPerVote;
