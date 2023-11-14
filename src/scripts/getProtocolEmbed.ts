@@ -19,7 +19,7 @@ export const getProtocolEmbed = (
   const exampleEmbed: APIEmbed = {
     color: embedColor,
     title: `New ${protocolName} ${questTypeName} Quest: ${gaugeSymbol}`,
-    url: `http://app.warden.vote/quest/?${protocolURI}`,
+    url: `https://quest.paladin.vote/#/${protocolURI}`,
     description: `Starting ${startPeriodFormatted} for ${duration.toString()} weeks\n\n`,
     fields: [
       {

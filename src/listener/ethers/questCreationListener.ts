@@ -133,11 +133,11 @@ const getProtocolName = (protocol: ProtocolType): string => {
 const getProtocolURI = (protocol: ProtocolType): string => {
   switch (protocol) {
     case ProtocolType.Balancer:
-      return 'protocol=bal';
+      return 'bal';
     case ProtocolType.Curve:
-      return 'protocol=crv';
+      return 'crv';
     case ProtocolType.Bunni:
-      return 'protocol=lit';
+      return 'lit';
     default:
       return '';
   }
