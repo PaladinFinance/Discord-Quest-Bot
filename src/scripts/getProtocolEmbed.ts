@@ -1,30 +1,41 @@
 import { APIEmbed } from 'discord.js';
+import { QuestType } from '../type/questType';
 
 export const getProtocolEmbed = (
   embedColor: number,
   protocolName: string,
+  questType: QuestType,
+  questTypeName: string,
   gaugeSymbol: string,
   startPeriodFormatted: string,
   protocolURI: string,
   duration: bigint,
-  totalRewardTokenFormatted: string,
+  minTotalRewardTokenFormatted: string,
+  maxTotalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
-  totalPriceFormatted: string,
+  minTotalPriceFormatted: string,
+  maxTotalPriceFormatted: string,
 ): APIEmbed => {
   const exampleEmbed: APIEmbed = {
     color: embedColor,
-    title: `New ${protocolName} Quest: ${gaugeSymbol}`,
-    url: `http://app.warden.vote/quest/?${protocolURI}`,
+    title: `New ${protocolName} ${questTypeName} Quest: ${gaugeSymbol}`,
+    url: `https://quest.paladin.vote/#/${protocolURI}`,
     description: `Starting ${startPeriodFormatted} for ${duration.toString()} weeks\n\n`,
     fields: [
       {
         name: ':coin: Amount',
-        value: `${totalRewardTokenFormatted} ${rewardTokenSymbol}`,
+        value:
+          questType == QuestType.Fixe
+            ? `${minTotalRewardTokenFormatted} ${rewardTokenSymbol}`
+            : `${minTotalRewardTokenFormatted} - ${maxTotalRewardTokenFormatted} ${rewardTokenSymbol}`,
         inline: true,
       },
       {
         name: ':moneybag: USD Value',
-        value: `$${totalPriceFormatted}`,
+        value:
+          questType == QuestType.Fixe
+            ? `$${minTotalPriceFormatted}`
+            : `$${minTotalPriceFormatted} - $${maxTotalPriceFormatted}`,
         inline: true,
       },
       {

@@ -10,19 +10,22 @@ createEtherEventListener(
   data.veBALQuestBoardContractAddresses,
   QuestBoardAbi,
   'NewQuest',
-  questCreationListener(ProtocolType.Balancer),
+  questCreationListener,
+  ProtocolType.Balancer,
 );
 createEtherEventListener(
   data.veCRVQuestBoardContractAddresses,
   QuestBoardAbi,
   'NewQuest',
-  questCreationListener(ProtocolType.Curve),
+  questCreationListener,
+  ProtocolType.Curve,
 );
 createEtherEventListener(
   data.veLITQuestBoardContractAddresses,
   QuestBoardAbi,
   'NewQuest',
-  questCreationListener(ProtocolType.Bunni),
+  questCreationListener,
+  ProtocolType.Bunni,
 );
 
 cron.schedule('0 0 * * 4', () => {
