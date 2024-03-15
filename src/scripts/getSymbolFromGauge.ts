@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { ProtocolType } from '../type/protocolType';
-import { getAddress } from 'ethers';
+import { Contract, getAddress } from 'ethers';
+import provider from '../config/etherProvider';
+import ERC20ABI from '../data/abi/ERC20.json';
+
+const getSymbolFromFxGauge =  async (gauge: string): Promise<string> => {
+  const gaugeContract = new Contract(gauge, ERC20ABI, provider);
+  return (await gaugeContract.symbol()).replace("-f-gauge", "");
+}
 
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   try {
@@ -83,6 +90,8 @@ const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promis
       return getSymbolFromCurveGauge(gauge);
     case ProtocolType.Bunni:
       return getSymbolFromBunniGauge(gauge);
+    case ProtocolType.Fx:
+      return getSymbolFromFxGauge(gauge);
     default:
       return '';
   }

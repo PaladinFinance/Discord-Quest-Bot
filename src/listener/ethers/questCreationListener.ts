@@ -25,6 +25,8 @@ const getChannels = (protocol: ProtocolType): string[] => {
       return data.bunniTargetChannelIds;
     case ProtocolType.Curve:
       return data.curveTargetChannelIds;
+    case ProtocolType.Fx:
+      return data.fxTargetChannelIds;
     default:
       return [];
   }
@@ -125,6 +127,8 @@ const getProtocolName = (protocol: ProtocolType): string => {
       return 'veCRV';
     case ProtocolType.Bunni:
       return 'veLIT';
+    case ProtocolType.Fx:
+      return 'veFXN';
     default:
       return '';
   }
@@ -138,6 +142,8 @@ const getProtocolURI = (protocol: ProtocolType): string => {
       return 'crv';
     case ProtocolType.Bunni:
       return 'lit';
+    case ProtocolType.Fx:
+      return 'fxn';
     default:
       return '';
   }
@@ -162,6 +168,8 @@ const getEmbedColor = (protocol: ProtocolType): number => {
       return 0xfffff;
     case ProtocolType.Bunni:
       return 0x800080;
+    case ProtocolType.Fx:
+      return 0xff0000;
     default:
       return 0x00000;
   }
