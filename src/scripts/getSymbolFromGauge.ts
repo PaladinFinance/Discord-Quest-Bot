@@ -2,12 +2,7 @@ import axios from 'axios';
 import { ProtocolType } from '../type/protocolType';
 import { Contract, getAddress } from 'ethers';
 import provider from '../config/etherProvider';
-import ERC20ABI from '../data/abi/ERC20.json';
-
-const getSymbolFromFxGauge =  async (gauge: string): Promise<string> => {
-  const gaugeContract = new Contract(gauge, ERC20ABI, provider);
-  return (await gaugeContract.symbol()).replace("-f-gauge", "");
-}
+import FxGauge from '../data/abi/FxGauge.json';
 
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   try {
@@ -80,6 +75,39 @@ const getSymbolFromBunniGauge = async (expectedGauge: string): Promise<string> =
     }
   }
   return '';
+};
+
+const getSymbolFromCurveLp = async (expectedLp: string): Promise<string> => {
+  try {
+    const res = await axios.get('https://api.curve.fi/api/getPools/all');
+
+    for (const lp of res.data.data.poolData) {
+      if (getAddress(lp.address) === getAddress(expectedLp)) {
+        return lp.coins.map((coin: any) => coin.symbol).join('+');
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  return '';
+};
+
+const getSymbolFromFxGauge = async (gauge: string): Promise<string> => {
+  try {
+    const gaugeContract = new Contract(gauge, FxGauge, provider);
+    const stakingToken = await gaugeContract.stakingToken();
+
+    let symbol = await getSymbolFromCurveLp(stakingToken);
+
+    // fallback to ERC20 symbol
+    if (symbol === '') {
+      symbol = (await gaugeContract.symbol()).replace('-gauge', '');
+    }
+    return symbol;
+  } catch (err) {
+    console.error(err);
+    return '';
+  }
 };
 
 const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
