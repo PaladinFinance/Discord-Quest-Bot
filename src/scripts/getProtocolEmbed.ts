@@ -10,11 +10,11 @@ export const getProtocolEmbed = (
   startPeriodFormatted: string,
   protocolURI: string,
   duration: bigint,
-  minTotalRewardTokenFormatted: string,
-  maxTotalRewardTokenFormatted: string,
+  totalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
-  minTotalPriceFormatted: string,
-  maxTotalPriceFormatted: string,
+  totalPriceFormatted: string,
+  minRewardPerVoteFormatted: string,
+  maxRewardPerVoteFormatted: string,
 ): APIEmbed => {
   const exampleEmbed: APIEmbed = {
     color: embedColor,
@@ -24,18 +24,20 @@ export const getProtocolEmbed = (
     fields: [
       {
         name: ':coin: Amount',
-        value:
-          questType == QuestType.Fixe
-            ? `${minTotalRewardTokenFormatted} ${rewardTokenSymbol}`
-            : `${minTotalRewardTokenFormatted} - ${maxTotalRewardTokenFormatted} ${rewardTokenSymbol}`,
+        value: `${totalRewardTokenFormatted} ${rewardTokenSymbol}`,
         inline: true,
       },
       {
         name: ':moneybag: USD Value',
+        value: `$${totalPriceFormatted}`,
+        inline: true,
+      },
+      {
+        name: ':chart_with_upwards_trend: Reward per Vote',
         value:
           questType == QuestType.Fixe
-            ? `$${minTotalPriceFormatted}`
-            : `$${minTotalPriceFormatted} - $${maxTotalPriceFormatted}`,
+            ? `${minRewardPerVoteFormatted} ${rewardTokenSymbol}`
+            : `${minRewardPerVoteFormatted} - ${maxRewardPerVoteFormatted} ${rewardTokenSymbol}`,
         inline: true,
       },
       {

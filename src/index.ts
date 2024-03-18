@@ -14,6 +14,13 @@ createEtherEventListener(
   ProtocolType.Balancer,
 );
 createEtherEventListener(
+  data.veFXNQuestBoardContractAddresses,
+  QuestBoardAbi,
+  'NewQuest',
+  questCreationListener,
+  ProtocolType.Fx,
+);
+createEtherEventListener(
   data.veCRVQuestBoardContractAddresses,
   QuestBoardAbi,
   'NewQuest',

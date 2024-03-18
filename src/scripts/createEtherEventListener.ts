@@ -1,6 +1,6 @@
 import { Contract, Listener } from 'ethers';
 import provider from '../config/etherProvider';
-import { ProtocolType } from 'src/type/protocolType';
+import { ProtocolType } from '../type/protocolType';
 
 const createEtherEventListener = (
   addresses: string[],

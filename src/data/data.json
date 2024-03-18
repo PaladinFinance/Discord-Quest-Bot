@@ -2,7 +2,9 @@
   "bunniTargetChannelIds": ["1108408224748679189"],
   "curveTargetChannelIds": ["1008049103793561670"],
   "balancerTargetChannelIds": ["1008049911624913018", "999427452789067926"],
+  "fxTargetChannelIds": ["1218099479803199490"],
   "veCRVQuestBoardContractAddresses": ["0xF13e938d7a1214ae438761941BC0C651405e68A4"],
   "veBALQuestBoardContractAddresses": ["0xf0CeABf99Ddd591BbCC962596B228007eD4624Ae"],
-  "veLITQuestBoardContractAddresses": ["0x1B921DBD13A280ee14BA6361c1196EB72aaa094e"]
+  "veLITQuestBoardContractAddresses": ["0x1B921DBD13A280ee14BA6361c1196EB72aaa094e"],
+  "veFXNQuestBoardContractAddresses": ["0xeB9C1Dbd95dcF5190E6D31Ba94f89593D48990bE"]
 }

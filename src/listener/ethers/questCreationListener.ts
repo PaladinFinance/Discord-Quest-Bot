@@ -25,6 +25,8 @@ const getChannels = (protocol: ProtocolType): string[] => {
       return data.bunniTargetChannelIds;
     case ProtocolType.Curve:
       return data.curveTargetChannelIds;
+    case ProtocolType.Fx:
+      return data.fxTargetChannelIds;
     default:
       return [];
   }
@@ -40,11 +42,11 @@ const postDiscordMessage = async (
   startPeriodFormatted: string,
   protocolURI: string,
   duration: bigint,
-  minTotalRewardTokenFormatted: string,
-  maxTotalRewardTokenFormatted: string,
+  totalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
-  minTotalPriceFormatted: string,
-  maxTotalPriceFormatted: string,
+  totalPriceFormatted: string,
+  minRewardPerVoteFormatted: string,
+  maxRewardPerVoteFormatted: string,
 ): Promise<void> => {
   if (!discordClient) return;
   try {
@@ -57,11 +59,11 @@ const postDiscordMessage = async (
       startPeriodFormatted,
       protocolURI,
       duration,
-      minTotalRewardTokenFormatted,
-      maxTotalRewardTokenFormatted,
+      totalRewardTokenFormatted,
       rewardTokenSymbol,
-      minTotalPriceFormatted,
-      maxTotalPriceFormatted,
+      totalPriceFormatted,
+      minRewardPerVoteFormatted,
+      maxRewardPerVoteFormatted,
     );
 
     const channels = getChannels(protocolType);
@@ -84,8 +86,7 @@ const postDiscordMessage = async (
 
 const postTweet = async (
   gaugeSymbol: string,
-  minTotalRewardTokenFormatted: string,
-  maxTotalRewardTokenFormatted: string,
+  totalRewardTokenFormatted: string,
   rewardTokenSymbol: string,
   minObjectiveVotesFormatted: string,
   maxObjectiveVotesFormatted: string,
@@ -99,8 +100,7 @@ const postTweet = async (
   try {
     const tweet = getTweet(
       gaugeSymbol,
-      minTotalRewardTokenFormatted,
-      maxTotalRewardTokenFormatted,
+      totalRewardTokenFormatted,
       rewardTokenSymbol,
       minObjectiveVotesFormatted,
       maxObjectiveVotesFormatted,
@@ -125,6 +125,8 @@ const getProtocolName = (protocol: ProtocolType): string => {
       return 'veCRV';
     case ProtocolType.Bunni:
       return 'veLIT';
+    case ProtocolType.Fx:
+      return 'veFXN';
     default:
       return '';
   }
@@ -138,6 +140,8 @@ const getProtocolURI = (protocol: ProtocolType): string => {
       return 'crv';
     case ProtocolType.Bunni:
       return 'lit';
+    case ProtocolType.Fx:
+      return 'fxn';
     default:
       return '';
   }
@@ -162,6 +166,8 @@ const getEmbedColor = (protocol: ProtocolType): number => {
       return 0xfffff;
     case ProtocolType.Bunni:
       return 0x800080;
+    case ProtocolType.Fx:
+      return 0xff0000;
     default:
       return 0x00000;
   }
@@ -192,31 +198,23 @@ const questCreationListener =
       const gaugeSymbol = await getSymbolFromGauge(gauge, protocolType);
       const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
       const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
-      const minTotalRewardToken = getTotalRewardToken(
-        minObjectiveVotes,
-        minRewardPerVote,
-        rewardTokenDecimals,
-      );
-      const maxTotalRewardToken = getTotalRewardToken(
+      const totalRewardToken = getTotalRewardToken(
         maxObjectiveVotes,
         maxRewardPerVote,
         rewardTokenDecimals,
       );
       const protocolName = getProtocolName(protocolType);
       const questTypeName = getQuestTypeName(questType);
-      const minTotalRewardTokenFormatted = minTotalRewardToken.toLocaleString();
-      const maxTotalRewardTokenFormatted = maxTotalRewardToken.toLocaleString();
+      const totalRewardTokenFormatted = totalRewardToken.toLocaleString();
       const minObjectiveVotesFormatted = (minObjectiveVotes / 10n ** 18n).toLocaleString();
       const maxObjectiveVotesFormatted = (maxObjectiveVotes / 10n ** 18n).toLocaleString();
-      const minTotalPrice = await getTotalPricePerToken(minTotalRewardToken, rewardToken);
-      const maxTotalPrice = await getTotalPricePerToken(maxTotalRewardToken, rewardToken);
+      const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
       const minRewardPerVoteFormatted = formatRewardPerVote(minRewardPerVote);
       const maxRewardPerVoteFormatted = formatRewardPerVote(maxRewardPerVote);
       const protocolURI = getProtocolURI(protocolType);
       const embedColor = getEmbedColor(protocolType);
       const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
-      const minTotalPriceFormatted = minTotalPrice.toFixed(2).toLocaleString();
-      const maxTotalPriceFormatted = maxTotalPrice.toFixed(2).toLocaleString();
+      const totalPriceFormatted = totalPrice.toFixed(2).toLocaleString();
 
       await Promise.all([
         postDiscordMessage(
@@ -229,16 +227,15 @@ const questCreationListener =
           startPeriodFormatted,
           protocolURI,
           duration,
-          minTotalRewardTokenFormatted,
-          maxTotalRewardTokenFormatted,
+          totalRewardTokenFormatted,
           rewardTokenSymbol,
-          minTotalPriceFormatted,
-          maxTotalPriceFormatted,
+          totalPriceFormatted,
+          minRewardPerVoteFormatted,
+          maxRewardPerVoteFormatted,
         ),
         postTweet(
           gaugeSymbol,
-          minTotalRewardTokenFormatted,
-          maxTotalRewardTokenFormatted,
+          totalRewardTokenFormatted,
           rewardTokenSymbol,
           minObjectiveVotesFormatted,
           maxObjectiveVotesFormatted,
