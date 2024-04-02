@@ -1,13 +1,12 @@
-import { WeiPerEther } from 'ethers';
 import bigintToDecimal from './bigintToDecimal';
 
 const getTotalRewardToken = (
-  objectiveVotes: bigint,
-  rewardPerVote: bigint,
+  rewardAmountPerPeriod: bigint,
+  duration: bigint,
   rewardDecimals: bigint,
 ): number => {
   try {
-    return bigintToDecimal((objectiveVotes * rewardPerVote) / WeiPerEther, rewardDecimals);
+    return bigintToDecimal(rewardAmountPerPeriod * duration, rewardDecimals);
   } catch (err) {
     console.error(err);
     return 0;

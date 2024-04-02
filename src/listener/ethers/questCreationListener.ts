@@ -192,6 +192,7 @@ const questCreationListener =
       const maxRewardPerVote = latestPeriod.maxRewardPerVote;
       const minObjectiveVotes = latestPeriod.minObjectiveVotes;
       const minRewardPerVote = latestPeriod.minRewardPerVote;
+      const rewardAmountPerPeriod = latestPeriod.rewardAmountPerPeriod;
 
       const questType = minRewardPerVote == maxRewardPerVote ? QuestType.Fixe : QuestType.Range;
 
@@ -199,8 +200,8 @@ const questCreationListener =
       const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
       const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
       const totalRewardToken = getTotalRewardToken(
-        maxObjectiveVotes,
-        maxRewardPerVote,
+        rewardAmountPerPeriod,
+        duration,
         rewardTokenDecimals,
       );
       const protocolName = getProtocolName(protocolType);
