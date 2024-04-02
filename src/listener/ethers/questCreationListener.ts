@@ -214,7 +214,7 @@ const questCreationListener =
       const protocolURI = getProtocolURI(protocolType);
       const embedColor = getEmbedColor(protocolType);
       const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
-      const totalPriceFormatted = totalPrice.toFixed(2).toLocaleString();
+      const totalPriceFormatted = Number(totalPrice.toFixed(2)).toLocaleString();
 
       await Promise.all([
         postDiscordMessage(
