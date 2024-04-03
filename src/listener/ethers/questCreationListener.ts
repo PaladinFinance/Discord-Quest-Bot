@@ -192,6 +192,7 @@ const questCreationListener =
       const maxRewardPerVote = latestPeriod.maxRewardPerVote;
       const minObjectiveVotes = latestPeriod.minObjectiveVotes;
       const minRewardPerVote = latestPeriod.minRewardPerVote;
+      const rewardAmountPerPeriod = latestPeriod.rewardAmountPerPeriod;
 
       const questType = minRewardPerVote == maxRewardPerVote ? QuestType.Fixe : QuestType.Range;
 
@@ -199,8 +200,8 @@ const questCreationListener =
       const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
       const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
       const totalRewardToken = getTotalRewardToken(
-        maxObjectiveVotes,
-        maxRewardPerVote,
+        rewardAmountPerPeriod,
+        duration,
         rewardTokenDecimals,
       );
       const protocolName = getProtocolName(protocolType);
@@ -209,12 +210,12 @@ const questCreationListener =
       const minObjectiveVotesFormatted = (minObjectiveVotes / 10n ** 18n).toLocaleString();
       const maxObjectiveVotesFormatted = (maxObjectiveVotes / 10n ** 18n).toLocaleString();
       const totalPrice = await getTotalPricePerToken(totalRewardToken, rewardToken);
-      const minRewardPerVoteFormatted = formatRewardPerVote(minRewardPerVote);
-      const maxRewardPerVoteFormatted = formatRewardPerVote(maxRewardPerVote);
+      const minRewardPerVoteFormatted = formatRewardPerVote(minRewardPerVote, rewardTokenDecimals);
+      const maxRewardPerVoteFormatted = formatRewardPerVote(maxRewardPerVote, rewardTokenDecimals);
       const protocolURI = getProtocolURI(protocolType);
       const embedColor = getEmbedColor(protocolType);
       const startPeriodFormatted = moment.unix(Number(startPeriod)).format('D MMMM YYYY');
-      const totalPriceFormatted = totalPrice.toFixed(2).toLocaleString();
+      const totalPriceFormatted = Number(totalPrice.toFixed(2)).toLocaleString();
 
       await Promise.all([
         postDiscordMessage(

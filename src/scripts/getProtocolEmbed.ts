@@ -40,11 +40,6 @@ export const getProtocolEmbed = (
             : `${minRewardPerVoteFormatted} - ${maxRewardPerVoteFormatted} ${rewardTokenSymbol}`,
         inline: true,
       },
-      {
-        name: ':page_with_curl: Gauge',
-        value: `${gaugeSymbol}`,
-        inline: true,
-      },
     ],
     timestamp: new Date().toISOString(),
   };
