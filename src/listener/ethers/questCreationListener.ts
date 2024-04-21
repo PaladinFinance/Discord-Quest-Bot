@@ -16,6 +16,7 @@ import formatRewardPerVote from '../../scripts/formatRewardPerVote';
 import { ProtocolType } from '../../type/protocolType';
 import getQuestPeriod from '../../scripts/getQuestPeriods';
 import { QuestType } from '../../type/questType';
+import { ChainIds } from '../../globals/chainIds';
 
 const getChannels = (protocol: ProtocolType): string[] => {
   switch (protocol) {
@@ -174,7 +175,7 @@ const getEmbedColor = (protocol: ProtocolType): number => {
 };
 
 const questCreationListener =
-  (protocolType: ProtocolType, questBoardAddress: string): Listener =>
+  (protocolType: ProtocolType, questBoardAddress: string, chainId: ChainIds): Listener =>
   async (
     questID: bigint,
     creator: string,
@@ -185,7 +186,7 @@ const questCreationListener =
   ) => {
     console.log(`Quest ${questID} created by ${creator} on ${protocolType}`);
     try {
-      const periods = await getQuestPeriod(questBoardAddress, questID);
+      const periods = await getQuestPeriod(questBoardAddress, questID, chainId);
       const latestPeriod = periods[periods.length - 1];
 
       const maxObjectiveVotes = latestPeriod.maxObjectiveVotes;
@@ -196,9 +197,9 @@ const questCreationListener =
 
       const questType = minRewardPerVote == maxRewardPerVote ? QuestType.Fixe : QuestType.Range;
 
-      const gaugeSymbol = await getSymbolFromGauge(gauge, protocolType);
-      const rewardTokenSymbol = await getSymbolFromToken(rewardToken);
-      const rewardTokenDecimals = await getDecimalsFromToken(rewardToken);
+      const gaugeSymbol = await getSymbolFromGauge(gauge, protocolType, chainId);
+      const rewardTokenSymbol = await getSymbolFromToken(rewardToken, chainId);
+      const rewardTokenDecimals = await getDecimalsFromToken(rewardToken, chainId);
       const totalRewardToken = getTotalRewardToken(
         rewardAmountPerPeriod,
         duration,

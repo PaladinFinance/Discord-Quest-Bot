@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { ProtocolType } from '../type/protocolType';
-import { Contract, getAddress } from 'ethers';
-import provider from '../config/etherProvider';
+import { Contract, Provider, getAddress } from 'ethers';
+import etherProvider from '../config/etherProvider';
 import FxGauge from '../data/abi/FxGauge.json';
+import { ChainIds } from '../globals/chainIds';
 
 const getSymbolFromBalancerGauge = async (gauge: string): Promise<string> => {
   try {
@@ -92,7 +93,7 @@ const getSymbolFromCurveLp = async (expectedLp: string): Promise<string> => {
   return '';
 };
 
-const getSymbolFromFxGauge = async (gauge: string): Promise<string> => {
+const getSymbolFromFxGauge = async (gauge: string, provider: Provider): Promise<string> => {
   try {
     const gaugeContract = new Contract(gauge, FxGauge, provider);
     const stakingToken = await gaugeContract.stakingToken();
@@ -110,7 +111,12 @@ const getSymbolFromFxGauge = async (gauge: string): Promise<string> => {
   }
 };
 
-const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promise<string> => {
+const getSymbolFromGauge = async (
+  gauge: string,
+  protocol: ProtocolType,
+  chainId: ChainIds,
+): Promise<string> => {
+  const provider = etherProvider[chainId];
   switch (protocol) {
     case ProtocolType.Balancer:
       return getSymbolFromBalancerGauge(gauge);
@@ -119,7 +125,7 @@ const getSymbolFromGauge = async (gauge: string, protocol: ProtocolType): Promis
     case ProtocolType.Bunni:
       return getSymbolFromBunniGauge(gauge);
     case ProtocolType.Fx:
-      return getSymbolFromFxGauge(gauge);
+      return getSymbolFromFxGauge(gauge, provider);
     default:
       return '';
   }
