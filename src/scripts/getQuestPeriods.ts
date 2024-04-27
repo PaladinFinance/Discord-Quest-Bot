@@ -1,6 +1,7 @@
 import { Contract } from 'ethers';
 import provider from '../config/etherProvider';
 import QuestBoardAbi from '../data/abi/QuestBoardAbi.json';
+import { ChainIds } from '../globals/chainIds';
 
 enum PeriodState {
   ZERO,
@@ -28,8 +29,12 @@ type QuestPeriod = {
   currentState: PeriodState;
 };
 
-const getQuestPeriod = async (questBoard: string, questId: bigint): Promise<QuestPeriod[]> => {
-  const contract = new Contract(questBoard, QuestBoardAbi, provider);
+const getQuestPeriod = async (
+  questBoard: string,
+  questId: bigint,
+  chainId: ChainIds,
+): Promise<QuestPeriod[]> => {
+  const contract = new Contract(questBoard, QuestBoardAbi, provider[chainId]);
   const periods = await contract.getAllQuestPeriodsForQuestId(questId);
   return periods;
 };

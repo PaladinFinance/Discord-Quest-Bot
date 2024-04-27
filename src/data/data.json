@@ -3,8 +3,23 @@
   "curveTargetChannelIds": ["1008049103793561670"],
   "balancerTargetChannelIds": ["1008049911624913018", "999427452789067926"],
   "fxTargetChannelIds": ["1218099479803199490"],
-  "veCRVQuestBoardContractAddresses": ["0xF13e938d7a1214ae438761941BC0C651405e68A4"],
-  "veBALQuestBoardContractAddresses": ["0xf0CeABf99Ddd591BbCC962596B228007eD4624Ae"],
-  "veLITQuestBoardContractAddresses": ["0x1B921DBD13A280ee14BA6361c1196EB72aaa094e"],
-  "veFXNQuestBoardContractAddresses": ["0xeB9C1Dbd95dcF5190E6D31Ba94f89593D48990bE"]
+  "veCRVQuestBoardContractAddresses": {
+    "1": ["0xF13e938d7a1214ae438761941BC0C651405e68A4"],
+    "42161": ["0x2Aa638596429e4734D872feC6e7a42e3f3D9fBf8"],
+    "137": ["0x089154A7E4C562d5998AB3D7Ca57B504A8912482"]
+  },
+  "veBALQuestBoardContractAddresses": {
+    "1": ["0xf0CeABf99Ddd591BbCC962596B228007eD4624Ae"],
+    "42161": ["0x8EdcFE9Bc7d2a735117B94C16456D8303777abbb"],
+    "10": ["0x12Da7E0c469CEeC4EFADa2F5E8CAedCD3F3E6748"],
+    "137": ["0x0482A2d6e2F895125b7237de70c675cd55FE17Ca"],
+    "1101": ["0x2Aa638596429e4734D872feC6e7a42e3f3D9fBf8"]
+  },
+  "veLITQuestBoardContractAddresses": {
+    "1": ["0x1B921DBD13A280ee14BA6361c1196EB72aaa094e"],
+    "42161": ["0x04C70Abaa9D3eB14F090094eDc72D5581Dc65A22"]
+  },
+  "veFXNQuestBoardContractAddresses": {
+    "1": ["0xeB9C1Dbd95dcF5190E6D31Ba94f89593D48990bE"]
+  }
 }
