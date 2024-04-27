@@ -3,4 +3,5 @@ export enum ChainIds {
   OPTIMISM = '10',
   ARBITRUM = '42161',
   POLYGON = '137',
+  POLYGON_ZKEVM = '1101',
 }
